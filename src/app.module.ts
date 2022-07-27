@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     MongooseModule.forRoot(
-      'mongodb+srv://clawyer:rDgKdNV8IC1NUi6u@cluster0.njruk.mongodb.net/pizzeria-api?retryWrites=true&w=majority',
+      
     ),
   ],
   controllers: [AppController],
