@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards } from "@nestjs/common";
 import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse } from "@nestjs/swagger";
+import { JwtAuthGuard } from "src/app/auth/guards/jwt-auth.guard";
 import { CategoryDTO } from "../dto/category.dto";
 import { ValidateObjectId } from "../pipe/company.pipe";
 import { CategoryService } from "../services/category.service";
@@ -8,6 +9,7 @@ import { CategoryService } from "../services/category.service";
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get("/list")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "Category has been successfully fetched" })
@@ -22,6 +24,7 @@ export class CategoryController {
   }
 
   // @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Get("/:categoryId")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "category fetched successfully" })
@@ -33,7 +36,7 @@ export class CategoryController {
       data: category,
     });
   }
-
+  @UseGuards(JwtAuthGuard)
   @Post("/")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "created category successfully" })
@@ -47,6 +50,7 @@ export class CategoryController {
   }
 
   // @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Put("/:categoryId")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "category updated successfully" })
@@ -60,6 +64,7 @@ export class CategoryController {
   }
 
   // @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Delete("/:categoryId")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "category updated successfully" })

@@ -8,12 +8,14 @@ import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { ConfigModule } from "@nestjs/config";
 import { AppService } from "./app.service";
+import { CategoryModule } from "./pizzas/categories/category.module";
 @Module({
   imports: [
     AppConfigurationModule,
     LoggerModule,
     UsersModule,
     AuthModule,
+    CategoryModule,
     ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [AppConfigurationModule],

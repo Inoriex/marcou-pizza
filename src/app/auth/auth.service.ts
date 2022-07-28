@@ -4,6 +4,8 @@ import { User } from "../users/users.model";
 import RefreshToken from "./entities/refresh-token.entity";
 import { sign, verify } from "jsonwebtoken";
 import { Auth, google } from "googleapis";
+import * as bcrypt from "bcrypt";
+
 @Injectable()
 export class AuthService {
   private refreshTokens: RefreshToken[] = [];
@@ -60,8 +62,10 @@ export class AuthService {
       return undefined;
     }
     // verify your user -- use argon2 for password hashing!!
-    if (user.password !== password) {
-      return undefined;
+    const isValid = await bcrypt.compare(password, user.password);
+
+    if (!isValid) {
+      return null;
     }
 
     return this.newRefreshAndAccessToken(user, values);
