@@ -1,20 +1,20 @@
 import { AppConfigurationModule } from "../config/app-configuration.module";
 import { AppConfigurationService } from "../config/app-configuration.service";
 import { AppController } from "./app.controller";
-import { UserController } from "./controllers/user.controller";
-import { AuthMiddleware } from "./middleware/auth.middleware";
-import { FirebaseAuthService } from "./services/firebase.service";
-import { AppService } from "./app.service";
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
 import { MongooseModule, MongooseModuleOptions } from "@nestjs/mongoose";
-import { PreauthMiddleware } from "../auth/preauth.middlewate";
 import { LoggerModule } from "../logger/logger.module";
-import { AuthController } from "./controllers/auth.controller";
-
+import { UsersModule } from "./users/users.module";
+import { AuthModule } from "./auth/auth.module";
+import { ConfigModule } from "@nestjs/config";
+import { AppService } from "./app.service";
 @Module({
   imports: [
     AppConfigurationModule,
     LoggerModule,
+    UsersModule,
+    AuthModule,
+    ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [AppConfigurationModule],
       inject: [AppConfigurationService],
@@ -28,12 +28,8 @@ import { AuthController } from "./controllers/auth.controller";
       },
     }),
   ],
-  controllers: [AppController, AuthController, UserController],
-  providers: [FirebaseAuthService, AppService],
-  exports: [FirebaseAuthService],
+  controllers: [AppController],
+  providers: [AppService],
+  exports: [],
 })
-export class AppModule implements NestModule {
-  public configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes({ path: "/api/v1", method: RequestMethod.ALL });
-  }
-}
+export class AppModule {}

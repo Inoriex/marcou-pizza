@@ -16,6 +16,7 @@ describe("Logger", () => {
   const logLevels = [LogLevel.Error, LogLevel.Warn, LogLevel.Info, LogLevel.HTTP, LogLevel.Verbose, LogLevel.Debug, LogLevel.Silly];
 
   /* tslint:disable-next-line:no-empty */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   const noop = () => {};
 
   describe("constructor", () => {
