@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { CategoryDTO } from "../dto/category.dto";
 
 export const CategorySchema = new mongoose.Schema(
   {
@@ -11,6 +12,5 @@ export const CategorySchema = new mongoose.Schema(
 );
 
 export interface Category extends mongoose.Document {
-  _id: string;
-  name: string;
+  CategoryDTO;
 }
