@@ -24,7 +24,7 @@ export class UsersService {
     return undefined;
   }
   findOne(id: number): Promise<User | undefined> {
-    const user = this.userModel.findOne(user => user.id === id);
+    const user = this.userModel.findOne({ _id: id });
     if (user) {
       return Promise.resolve(user);
     }

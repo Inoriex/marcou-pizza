@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, HttpException, HttpStatus, Ip, Post, Req } from "@nestjs/common";
+import { Body, Controller, Delete, HttpException, HttpStatus, Ip, Post, Req, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import RefreshTokenDto from "./dto/refresh-token.dto";
 import { LoginDto } from "./dto/login.dto";
 import GoogleTokenDto from "./dto/google-token.dto";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("auth")
 export class AuthController {
