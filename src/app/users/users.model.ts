@@ -13,6 +13,7 @@ export const UserSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+// ON rajoute toutes les infos de base, genre le nom/prenom/tel etc adresse
 
 export interface User extends mongoose.Document {
   _id: string;

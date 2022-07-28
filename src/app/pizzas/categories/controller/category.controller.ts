@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, 
 import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/app/auth/guards/jwt-auth.guard";
 import { CategoryDTO } from "../dto/category.dto";
-import { ValidateObjectId } from "../pipe/company.pipe";
+import { ValidateObjectId } from "../pipe/category.pipe";
 import { CategoryService } from "../services/category.service";
 
 @Controller("api/categories")

@@ -9,12 +9,15 @@ import { AuthModule } from "./auth/auth.module";
 import { ConfigModule } from "@nestjs/config";
 import { AppService } from "./app.service";
 import { CategoryModule } from "./pizzas/categories/category.module";
+import { PizzasModule } from "./pizzas/pizzas.module";
+
 @Module({
   imports: [
     AppConfigurationModule,
     LoggerModule,
     UsersModule,
     AuthModule,
+    PizzasModule,
     CategoryModule,
     ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
