@@ -1,13 +1,14 @@
 import { CategoryDTO } from "../categories/dto/category.dto";
-import { CommentDTO } from "./comment.dto";
+import { IngredientsDTO } from "./ingredients.dto";
 
 export interface PizzaDTO {
-  _id: number;
   name: string;
   image?: string;
   category: CategoryDTO;
-  label?: string;
-  price: string;
+  price_P: number;
+  price_G: number;
   description?: string;
-  comments: CommentDTO[];
+  ingredients: IngredientsDTO[];
 }
+// price_P pizza petite
+// price_G pizza grande
