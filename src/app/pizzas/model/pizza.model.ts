@@ -10,7 +10,7 @@ export class Pizza extends Document {
   @Prop()
   name: string;
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Category" })
-  category: CategoryDTO;
+  category: CategoryDTO["name"];
   @Prop()
   image?: string;
   @Prop()
