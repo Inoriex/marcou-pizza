@@ -17,6 +17,19 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "resolveJsonModule":true
+    "resolveJsonModule":true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@app/*": ["src/app/*"],
+      "@pizza/*": ["src/app/modules/pizza/*"],
+      "@user/*": ["src/app/modules/user/*"],
+      "@auth/*": ["src/app/modules/auth/*"],
+      "@config/*": ["src/config/*"],
+      "@logger/*": ["src/logger/*"],
+      "@components/*": ["src/components/*"],
+      "@restaurant/*": ["src/app/modules/restaurant/*"],
+      "@token/*": ["src/app/modules/token/*"],
+      "@mail/*": ["src/app/modules/mail/*"]
+    }
   }
 }

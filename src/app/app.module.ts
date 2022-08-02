@@ -1,25 +1,28 @@
-import { AppConfigurationModule } from "../config/app-configuration.module";
-import { AppConfigurationService } from "../config/app-configuration.service";
-import { AppController } from "./app.controller";
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { MongooseModule, MongooseModuleOptions } from "@nestjs/mongoose";
-import { LoggerModule } from "../logger/logger.module";
-import { UsersModule } from "./users/users.module";
-import { AuthModule } from "./auth/auth.module";
 import { ConfigModule } from "@nestjs/config";
-import { AppService } from "./app.service";
-import { CategoryModule } from "./pizzas/categories/category.module";
-import { PizzasModule } from "./pizzas/pizzas.module";
+
+import { AppConfigurationModule } from "@config/app-configuration.module";
+import { AppConfigurationService } from "@config/app-configuration.service";
+import { configModule } from "@/configure.root";
+import { LoggerModule } from "@logger/logger.module";
+
+import { UserModule } from "@user/user.module";
+import { AuthModule } from "@auth/auth.module";
+import { PizzaModule } from "@pizza/pizza.module";
+import { TokenModule } from "@token/token.module";
+import { MailModule } from "@mail/mail.module";
 
 @Module({
   imports: [
     AppConfigurationModule,
     LoggerModule,
-    UsersModule,
+    UserModule,
     AuthModule,
-    PizzasModule,
-    CategoryModule,
-    ConfigModule.forRoot(),
+    configModule,
+    PizzaModule,
+    TokenModule,
+    MailModule,
     MongooseModule.forRootAsync({
       imports: [AppConfigurationModule],
       inject: [AppConfigurationService],
@@ -33,8 +36,5 @@ import { PizzasModule } from "./pizzas/pizzas.module";
       },
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
-  exports: [],
 })
 export class AppModule {}
