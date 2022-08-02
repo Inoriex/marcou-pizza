@@ -29,6 +29,12 @@ export class Paiment extends Document {
 
   @Prop()
   num: string;
+
+  @Prop()
+  quantité: string;
+
+  @Prop()
+  totalprix: string;
 }
 
 export const PaimentSchema = SchemaFactory.createForClass(Paiment);
