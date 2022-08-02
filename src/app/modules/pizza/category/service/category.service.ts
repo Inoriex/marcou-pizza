@@ -6,7 +6,7 @@ import { Category } from "../schema/category.schema";
 
 @Injectable()
 export class CategoryService {
-  constructor(@InjectModel("category") private readonly categoryModel: Model<Category>) {}
+  constructor(@InjectModel("Category") private readonly categoryModel: Model<Category>) {}
   async getAllCategory(): Promise<Category[]> {
     return await this.categoryModel.find({}).exec();
     // OR findOne(category => category.name === categoryName);

@@ -5,7 +5,7 @@ import { PizzaDTO } from "../dto/pizza.dto";
 import { PizzaService } from "../service/pizza.service";
 
 // Localhost:3000/pizza/
-@Controller("pizza")
+@Controller("api/pizza")
 export class PizzaController {
   constructor(private pizzaService: PizzaService) {}
 

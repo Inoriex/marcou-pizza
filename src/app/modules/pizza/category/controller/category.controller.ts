@@ -6,7 +6,7 @@ import { ValidateObjectId } from "@pizza/pipe/id.pipe";
 import { CategoryService } from "../service/category.service";
 
 //localhost:3000/api/categories/
-@Controller("api/categories")
+@Controller("api/category")
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
 

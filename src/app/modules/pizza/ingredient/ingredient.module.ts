@@ -6,9 +6,9 @@ import { IngredientService } from "./service/ingredient.service";
 import { IngredientSchema } from "./schema/ingredient.schema";
 
 @Module({
-  imports: [LoggerModule, MongooseModule.forFeature([{ name: "category", schema: IngredientSchema }])],
+  imports: [LoggerModule, MongooseModule.forFeature([{ name: "Ingredient", schema: IngredientSchema }])],
   providers: [IngredientService],
   exports: [IngredientService],
   controllers: [IngredientController],
 })
-export class IngredientsModule {}
+export class IngredientModule {}

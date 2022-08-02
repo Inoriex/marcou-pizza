@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards, ValidationPipe, Query, Patch, Logger} from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards, ValidationPipe, Query, Patch, Logger } from "@nestjs/common";
 import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse } from "@nestjs/swagger";
 import { AuthService } from "@auth/service/auth.service";
 import { CreateUserDto } from "@user/dto/create-user.dto";
@@ -39,7 +39,6 @@ export class AuthController {
   @ApiInternalServerErrorResponse({ description: "unable to log user" })
   @Post("/signIn")
   async signIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<IReadableUser> {
-    Logger.log(signInDto);
     return await this.authService.signIn(signInDto);
   }
 

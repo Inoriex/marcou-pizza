@@ -42,8 +42,8 @@ export class IngredientController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "created ingredient successfully" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
-  async createIngredient(@Res() res, @Body() ingredientdto: IngredientDTO) {
-    const ingredient = await this.ingredientService.createIngredient(ingredientdto);
+  async createIngredient(@Res() res, @Body() ingredientDTO: IngredientDTO) {
+    const ingredient = await this.ingredientService.createIngredient(ingredientDTO);
     return res.status(HttpStatus.OK).json({
       message: "Ingredient has been created successfully",
       data: ingredient,
