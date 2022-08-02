@@ -6,7 +6,7 @@ import { Pizza } from "../schema/pizza.schema";
 
 @Injectable()
 export class PizzaService {
-  constructor(@InjectModel("pizza") private readonly pizzaModel: Model<Pizza>) {}
+  constructor(@InjectModel("Pizza") private readonly pizzaModel: Model<Pizza>) {}
   async getAllPizza(): Promise<Pizza[]> {
     return await this.pizzaModel.find({}).exec();
     // OR findOne(pizza => pizza.name === pizzaName);

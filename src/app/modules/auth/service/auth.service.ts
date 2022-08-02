@@ -45,6 +45,7 @@ export class AuthService {
 
   async signIn({ email, password }: SignInDto): Promise<IReadableUser> {
     const user = await this.userService.findByEmail(email).catch(err => Logger.log(err));
+
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = await this.signUser(user);
       const readableUser = user.toObject() as IReadableUser;

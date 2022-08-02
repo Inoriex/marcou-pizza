@@ -6,6 +6,7 @@ import { User } from "@user/schema/user.schema";
 import * as bcrypt from "bcrypt";
 import * as _ from "lodash";
 import { CreateUserDto } from "@user/dto/create-user.dto";
+import { statusEnum } from "@user/enums/status.enum";
 
 @Injectable()
 export class UserService {
@@ -21,6 +22,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto, roles: string[]): Promise<IUser> {
     const hash = await this.hashPassword(createUserDto.password);
     const createdUser = new this.userModel(_.assignIn(createUserDto, { password: hash, roles }));
+    createdUser.status = statusEnum.active;
     return await createdUser.save();
   }
 
