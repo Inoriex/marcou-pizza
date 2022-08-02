@@ -10,19 +10,10 @@ export class Paiment extends Document {
   _id: string;
 
   @Prop()
-  prix: string;
+//   ticketclient: PaimentDTO["ticketclient"];
 
   @Prop()
-  ticketclient: PaimentDTO["ticketclient"];
-
-  @Prop()
-  ticketcommercant: PaimentDTO["ticketcommercant"];
-
-  @Prop()
-  ville: string;
-
-  @Prop()
-  nomboutique: PaimentDTO["nomboutique"];
+//   ticketcommercant: PaimentDTO["ticketcommercant"];
 
   @Prop()
   date: string;
@@ -30,11 +21,6 @@ export class Paiment extends Document {
   @Prop()
   num: string;
 
-  @Prop()
-  quantité: string;
-
-  @Prop()
-  totalprix: string;
 }
 
 export const PaimentSchema = SchemaFactory.createForClass(Paiment);
