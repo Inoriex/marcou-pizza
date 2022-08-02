@@ -1,19 +1,27 @@
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
+import { ConfigService } from "@nestjs/config";
+import { IUser } from "@user/interfaces/user.interface";
+import { TokenService } from "@token/service/token.service";
 
-// Strategy d'appel d'api, lors de l'envoit d'une requete, on vérifie que le token est valide dans le Bearer et on valide le payload
+@Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly configService: ConfigService, private readonly tokenService: TokenService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: process.env.ACCESS_SECRET,
+      secretOrKey: configService.get<string>("JWT_SECRET"),
+      passReqToCallback: true,
     });
   }
 
-  validate(payload) {
-    return {
-      userId: payload.userId,
-    };
+  async validate(req, user: Partial<IUser>) {
+    const token = req.headers.authorization.slice(7);
+    const tokenExists = await this.tokenService.exists(user._id, token);
+    if (tokenExists) {
+      return user;
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }

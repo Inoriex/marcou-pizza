@@ -1,22 +1,31 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 import { Transform } from "class-transformer";
-
-export type AddressDocument = Address & Document;
+import { AddressDTO } from "@restaurant/dto/address.dto";
+export type RestaurantDocument = Restaurant & Document;
 
 @Schema()
-export class Address extends Document {
+export class Restaurant extends Document {
   @Transform(({ value }) => value.toString())
   _id: string;
 
   @Prop()
-  city: string;
+  title: string;
 
   @Prop()
-  street: string;
+  ceo: string;
 
   @Prop()
-  num: number;
+  tel: string;
+
+  @Prop()
+  city: AddressDTO["city"];
+
+  @Prop()
+  street: AddressDTO["street"];
+
+  @Prop()
+  num: AddressDTO["num"];
 }
 
-export const RestaurantSchema = SchemaFactory.createForClass(Address);
+export const RestaurantSchema = SchemaFactory.createForClass(Restaurant);

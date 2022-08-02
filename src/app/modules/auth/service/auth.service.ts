@@ -1,103 +1,82 @@
-import { Injectable } from "@nestjs/common";
-import { UserService } from "@user/service/user.service";
-import { User } from "@user/schema/user.schema";
-import RefreshToken from "../entities/refresh-token.entity";
-import { sign, verify } from "jsonwebtoken";
-import { Auth, google } from "googleapis";
+import { BadRequestException, Injectable, MethodNotAllowedException, UnauthorizedException, Logger } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
-import { ObjectId } from "mongoose";
+import * as _ from "lodash";
+import * as moment from "moment";
+
+import { UserService } from "@user/service/user.service";
+import { TokenService } from "@token/service/token.service";
+import { CreateUserDto } from "@user/dto/create-user.dto";
+import { SignOptions } from "jsonwebtoken";
+import { CreateUserTokenDto } from "@token/dto/create-user-token.dto";
+import { roleEnum } from "@user/enums/role.enum";
+import { IUser } from "@user/interfaces/user.interface";
+import { ConfigService } from "@nestjs/config";
+import { MailService } from "@mail/service/mail.service";
+import { statusEnum } from "@user/enums/status.enum";
+import { SignInDto } from "@auth/dto/signin.dto";
+import { ITokenPayload } from "@auth/interfaces/token-payload.interface";
+import { IReadableUser } from "@user/interfaces/readable-user.interface";
+import { ChangePasswordDto } from "@auth/dto/change-password.dto";
+import { userSensitiveFieldsEnum } from "@user/enums/protected-fields.enum";
+import { ForgotPasswordDto } from "@auth/dto/forgot-password.dto";
+import { IUserToken } from "@token/interfaces/user-token.interface";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class AuthService {
-  private refreshTokens: RefreshToken[] = [];
-  private oauthClient: Auth.OAuth2Client;
+  private readonly clientAppUrl: string;
 
-  // Google provider (données de l'api dans le .env)
-  constructor(private readonly UserService: UserService) {
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    this.oauthClient = new google.auth.OAuth2(clientId, clientSecret);
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly tokenService: TokenService,
+    private readonly configService: ConfigService,
+    private readonly mailService: MailService,
+  ) {
+    this.clientAppUrl = this.configService.get<string>("FE_APP_URL");
   }
 
-  // Fonction qui permet de récupérer le refresh token dans le localstorage et sinon dans la base de données
-  async refresh(refreshStr: string): Promise<string | undefined> {
-    const refreshToken = await this.retrieveRefreshToken(refreshStr);
-    if (!refreshToken) {
-      return undefined;
-    }
+  async signUp(createUserDto: CreateUserDto): Promise<boolean> {
+    const token = Math.floor(1000 + Math.random() * 9000).toString();
+    const user = await this.userService.create(createUserDto, [roleEnum.user]);
+    // await this.mailService.sendUserConfirmation(user, token);
+    return true;
+  }
 
-    const user = await this.UserService.findOne(refreshToken.userId);
-    if (!user) {
-      return undefined;
-    }
+  async signIn({ email, password }: SignInDto): Promise<IReadableUser> {
+    const user = await this.userService.findByEmail(email).catch(err => Logger.log(err));
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const token = await this.signUser(user);
+      const readableUser = user.toObject() as IReadableUser;
+      readableUser.accessToken = token;
 
-    const accessToken = {
-      userId: refreshToken.userId,
+      return _.omit<any>(readableUser, Object.values(userSensitiveFieldsEnum)) as IReadableUser;
+    }
+    throw new BadRequestException("Invalid credentials");
+  }
+
+  async signUser(user: IUser, withStatusCheck = true): Promise<string> {
+    if (withStatusCheck && user.status !== statusEnum.active) {
+      throw new MethodNotAllowedException();
+    }
+    const tokenPayload: ITokenPayload = {
+      _id: user._id,
+      status: user.status,
+      roles: user.roles,
     };
+    const token = await this.generateToken(tokenPayload);
+    const expireAt = moment().add(1, "day").toISOString();
 
-    return sign(accessToken, process.env.ACCESS_SECRET, { expiresIn: "1h" });
-  }
-
-  // Fonction qui permet de récupérer le refresh token dans la base de données
-  private retrieveRefreshToken(refreshStr: string): Promise<RefreshToken | undefined> {
-    try {
-      const decoded = verify(refreshStr, process.env.REFRESH_SECRET);
-      if (typeof decoded === "string") {
-        return undefined;
-      }
-      return Promise.resolve(this.refreshTokens.find(token => token.id === decoded.id));
-    } catch (e) {
-      return undefined;
-    }
-  }
-
-  async loginGoogleUser(token: string, values: { userAgent: string; ipAddress: string }): Promise<{ accessToken: string; refreshToken: string } | undefined> {
-    const tokenInfo = await this.oauthClient.getTokenInfo(token);
-    const user = await this.UserService.findByEmail(tokenInfo.email);
-    if (user) {
-      return this.newRefreshAndAccessToken(user, values);
-    }
-    return undefined;
-  }
-
-  async login(email: string, password: string, values: { userAgent: string; ipAddress: string }): Promise<{ accessToken: string; refreshToken: string } | undefined> {
-    const user = await this.UserService.findByEmail(email);
-    if (!user) {
-      return undefined;
-    }
-    // verify your user -- use argon2 for password hashing!!
-    const isValid = await bcrypt.compare(password, user.password);
-
-    if (!isValid) {
-      return null;
-    }
-
-    return this.newRefreshAndAccessToken(user, values);
-  }
-
-  private async newRefreshAndAccessToken(user: User, values: { userAgent: string; ipAddress: string }): Promise<{ accessToken: string; refreshToken: string }> {
-    const refreshObject = new RefreshToken({
-      id: this.refreshTokens.length === 0 ? 0 : this.refreshTokens[this.refreshTokens.length - 1].id + 1,
-      ...values,
-      userId: user._id,
+    await this.saveToken({
+      token,
+      expireAt,
+      uId: user._id,
     });
-    this.refreshTokens.push(refreshObject);
 
-    return {
-      refreshToken: refreshObject.sign(),
-      accessToken: sign(
-        {
-          userId: user._id,
-        },
-        process.env.ACCESS_SECRET,
-        {
-          expiresIn: "1h",
-        },
-      ),
-    };
+    return token;
   }
 
-  async changePassword(userId: ObjectId, changePasswordDto: ChangePasswordDto): Promise<boolean> {
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto): Promise<boolean> {
     const password = await this.userService.hashPassword(changePasswordDto.password);
 
     await this.userService.update(userId, { password });
@@ -105,13 +84,43 @@ export class AuthService {
     return true;
   }
 
-  async logout(refreshStr): Promise<void> {
-    const refreshToken = await this.retrieveRefreshToken(refreshStr);
+  async confirm(token: string): Promise<IUser> {
+    const data = await this.verifyToken(token);
+    const user = await this.userService.find(data._id);
 
-    if (!refreshToken) {
-      return;
+    await this.tokenService.delete(data._id, token);
+
+    if (user && user.status === statusEnum.pending) {
+      user.status = statusEnum.active;
+      return user.save();
     }
-    // delete refreshtoken from db
-    this.refreshTokens = this.refreshTokens.filter(refreshToken => refreshToken.id !== refreshToken.id);
+    throw new BadRequestException("Confirmation error");
+  }
+
+  private async generateToken(data: ITokenPayload, options?: SignOptions): Promise<string> {
+    return this.jwtService.sign(data, options);
+  }
+
+  private async verifyToken(token): Promise<any> {
+    const data = this.jwtService.verify(token) as ITokenPayload;
+    const tokenExists = await this.tokenService.exists(data._id, token);
+
+    if (tokenExists) {
+      return data;
+    }
+    throw new UnauthorizedException();
+  }
+
+  private saveToken(createUserTokenDto: CreateUserTokenDto): Promise<IUserToken> {
+    return this.tokenService.create(createUserTokenDto);
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
+    const user = await this.userService.findByEmail(forgotPasswordDto.email);
+    if (!user) {
+      throw new BadRequestException("Invalid email");
+    }
+    const token = await this.signUser(user);
+    // await this.mailService.forgotPassword(user, token);
   }
 }

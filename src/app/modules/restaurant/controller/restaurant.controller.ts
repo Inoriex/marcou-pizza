@@ -31,8 +31,8 @@ export class RestaurantController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "L'address à étais updated avec succès" })
   @ApiBadRequestResponse({ description: "La validation des paramettre à échouer" })
-  async updateAddress(@Res() res, @Body() addressDto: Partial<AddressDTO>, @Param("addressId") AddressId) {
-    const address = await this.restaurantService.updateAddress(AddressId, addressDto);
+  async updateAddress(@Res() res, @Body() addressDto: Partial<AddressDTO>, @Param("addressId") addressId) {
+    const address = await this.restaurantService.updateAddress(addressId, addressDto);
     return res.status(HttpStatus.OK).json({
       message: "l’address a été récupéré avec succès ",
       data: address,

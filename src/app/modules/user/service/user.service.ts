@@ -1,43 +1,38 @@
-import { Injectable, Logger, ClassSerializerInterceptor, UseInterceptors, SerializeOptions } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, ObjectId } from "mongoose";
+import { Model } from "mongoose";
+import { IUser } from "@user/interfaces/user.interface";
 import { User } from "@user/schema/user.schema";
-import { IUser } from "@user/interface/user.interface";
 import * as bcrypt from "bcrypt";
+import * as _ from "lodash";
+import { CreateUserDto } from "@user/dto/create-user.dto";
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel("user") private readonly userModel: Model<User>) {}
-  async createUser(user_email: string, password: string) {
-    const email = user_email.toLowerCase();
-    Logger.log(user_email);
-    const newUser = new this.userModel({
-      email,
-      password,
-    });
-    await newUser.save();
-    return newUser;
+  private readonly saltRounds = 10;
+
+  constructor(@InjectModel("User") private readonly userModel: Model<IUser>) {}
+
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(this.saltRounds);
+    return await bcrypt.hash(password, salt);
   }
-  @UseInterceptors(ClassSerializerInterceptor)
-  @SerializeOptions({
-    excludePrefixes: ["_"],
-    groups: ["admin"],
-  })
-  async updatePassword(id: string, payload: Partial<IUser>) {
+
+  async create(createUserDto: CreateUserDto, roles: string[]): Promise<IUser> {
+    const hash = await this.hashPassword(createUserDto.password);
+    const createdUser = new this.userModel(_.assignIn(createUserDto, { password: hash, roles }));
+    return await createdUser.save();
+  }
+
+  async find(id: string): Promise<IUser> {
+    return await this.userModel.findById(id).exec();
+  }
+
+  async findByEmail(email: string): Promise<IUser> {
+    return await this.userModel.findOne({ email }).exec();
+  }
+
+  async update(id: string, payload: Partial<IUser>) {
     return this.userModel.updateOne({ _id: id }, payload);
-  }
-  findByEmail(email: string): Promise<User | undefined> {
-    const user = this.userModel.findOne({ email });
-    if (user) {
-      return Promise.resolve(user);
-    }
-    return undefined;
-  }
-  findOne(id: ObjectId): Promise<User | undefined> {
-    const user = this.userModel.findOne({ _id: id });
-    if (user) {
-      return Promise.resolve(user);
-    }
-    return undefined;
   }
 }

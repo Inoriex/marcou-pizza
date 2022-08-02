@@ -1,80 +1,56 @@
-import { Body, Controller, Delete, HttpException, ValidationPipe, HttpStatus, Ip, Post, Req, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards, ValidationPipe, Query, Patch, Logger} from "@nestjs/common";
+import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse } from "@nestjs/swagger";
 import { AuthService } from "@auth/service/auth.service";
-import RefreshTokenDto from "@auth/dto/refresh-token.dto";
-import { LoginDto } from "@auth/dto/login.dto";
-import GoogleTokenDto from "@auth/dto/google-token.dto";
-import { AuthGuard } from "@nestjs/passport";
 import { CreateUserDto } from "@user/dto/create-user.dto";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { ConfirmAccountDto } from "@auth/dto/confirm-account.dto";
+import { SignInDto } from "@auth/dto/signin.dto";
 import { IReadableUser } from "@user/interfaces/readable-user.interface";
 import { ForgotPasswordDto } from "@auth/dto/forgot-password.dto";
-import { GetUser } from "@components/decorators/get-user.decorator";
+import { AuthGuard } from "@nestjs/passport";
+import { GetUser } from "@/components/decorators/get-user.decorator";
 import { IUser } from "@user/interfaces/user.interface";
 import { ChangePasswordDto } from "@auth/dto/change-password.dto";
+import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
 
-// Controller d'authentification => jwt
-// Localhost:3000/auth/
 @ApiTags("auth")
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ description: "User has been successfully created" })
+  @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
+  @ApiInternalServerErrorResponse({ description: "unable to create user" })
   @Post("/signUp")
   async signUp(@Body(new ValidationPipe()) createUserDto: CreateUserDto): Promise<boolean> {
     return this.authService.signUp(createUserDto);
   }
-  // localhost:3000/auth/login
-  @Post("login")
-  // Fonction login qui renvoie un token (création de  session)
-  /* async login(@Req() request, @Ip() ip: string, @Body() body: LoginDto) {
-    return this.authService.login(body.email, body.password, {
-      ipAddress: ip,
-      userAgent: request.headers["user-agent"],
-    });
-  } */
-  async login(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<IReadableUser> {
-    return await this.authService.login(signInDto);
+
+  @Get("/confirm")
+  async confirm(@Query(new ValidationPipe()) query: ConfirmAccountDto): Promise<boolean> {
+    await this.authService.confirm(query.token);
+    return true;
   }
-  // localhost:3000/auth/google/login
-  @Post("/google/login")
-  // Google login provider
-  async googleLogin(@Body() body: GoogleTokenDto, @Req() req, @Ip() ip: string): Promise<{ accessToken: string; refreshToken: string }> {
-    const result = await this.authService.loginGoogleUser(body.token, {
-      userAgent: req.headers["user-agent"],
-      ipAddress: ip,
-    });
-    if (result) {
-      return result;
-    } else {
-      throw new HttpException(
-        {
-          status: HttpStatus.UNAUTHORIZED,
-          error: "Error while logging in with google",
-        },
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ description: "User has been successfully logged in" })
+  @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
+  @ApiInternalServerErrorResponse({ description: "unable to log user" })
+  @Post("/signIn")
+  async signIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<IReadableUser> {
+    Logger.log(signInDto);
+    return await this.authService.signIn(signInDto);
   }
+
   @Post("/forgotPassword")
   async forgotPassword(@Body(new ValidationPipe()) forgotPasswordDto: ForgotPasswordDto): Promise<void> {
     return this.authService.forgotPassword(forgotPasswordDto);
   }
 
   @Patch("/changePassword")
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   async changePassword(@GetUser() user: IUser, @Body(new ValidationPipe()) changePasswordDto: ChangePasswordDto): Promise<boolean> {
     return this.authService.changePassword(user._id, changePasswordDto);
-  }
-  // localhost:3000/auth/refresh
-  @Post("refresh")
-  // refresh token
-  async refreshToken(@Body() body: RefreshTokenDto) {
-    return this.authService.refresh(body.refreshToken);
-  }
-
-  @Delete("logout")
-  async logout(@Body() body: RefreshTokenDto) {
-    return this.authService.logout(body.refreshToken);
   }
 }

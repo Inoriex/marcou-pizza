@@ -8,7 +8,7 @@ import * as bcrypt from "bcrypt";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
+  /* @UseGuards(JwtAuthGuard)
   @Get("/me")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user successfully fetched" })
@@ -17,7 +17,7 @@ export class UserController {
   me(@Req() request) {
     const userId = request.user.userId;
     return this.userService.findOne(userId);
-  }
+  } */
   /*
   @Post("/login")
   async login(@Body("password") userPassword: string, @Body("email") email: string) {
@@ -34,7 +34,7 @@ export class UserController {
     return null;
   }
  */
-  @HttpCode(HttpStatus.OK)
+  /* @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user successfully registered" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "unable to fetch user details" })
@@ -47,5 +47,5 @@ export class UserController {
       userId: result.id,
       email: result.email,
     };
-  }
+  } */
 }

@@ -19,6 +19,7 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   const configService = app.get(ConfigService);
   SwaggerModule.setup("api/v1", app, createDocument(app));
+  app.enableCors();
   await app.listen(configService.get().port);
 }
 export default admin;
