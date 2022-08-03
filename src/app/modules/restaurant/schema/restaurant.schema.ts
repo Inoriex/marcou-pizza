@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
-import { Transform } from "class-transformer";
-import { AddressDTO } from "@restaurant/dto/address.dto";
+import mongoose, { Document, ObjectId, Types, Schema as MongooseSchema } from "mongoose";
+import { Transform, Type } from "class-transformer";
+import { Address } from "@user/schema/address.schema";
 export type RestaurantDocument = Restaurant & Document;
 
 @Schema()
@@ -13,19 +13,17 @@ export class Restaurant extends Document {
   title: string;
 
   @Prop()
+  image?: string;
+
+  @Prop()
   ceo: string;
 
   @Prop()
   tel: string;
 
-  @Prop()
-  city: AddressDTO["city"];
-
-  @Prop()
-  street: AddressDTO["street"];
-
-  @Prop()
-  num: AddressDTO["num"];
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Address" })
+  @Type(() => Address)
+  address: Address;
 }
 
 export const RestaurantSchema = SchemaFactory.createForClass(Restaurant);

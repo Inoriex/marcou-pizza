@@ -1,14 +1,24 @@
 import { CategoryDTO } from "../category/dto/category.dto";
 import { IngredientDTO } from "../ingredient/dto/ingredient.dto";
+import { IsString, IsNotEmpty } from "class-validator";
 
-export interface PizzaDTO {
+export class PizzaDTO {
+  @IsString()
+  @IsNotEmpty()
   name: string;
+
+  @IsString()
   image?: string;
-  category: CategoryDTO;
-  price_P: number;
-  price_G: number;
+
+  @IsString()
+  price_P: string;
+
+  @IsString()
+  price_G: string;
+
+  @IsString()
   description?: string;
-  ingredients: IngredientDTO[];
+
+  category: string;
+  ingredients: string[];
 }
-// price_P pizza petite
-// price_G pizza grande

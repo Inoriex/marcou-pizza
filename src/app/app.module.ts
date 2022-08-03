@@ -12,6 +12,7 @@ import { AuthModule } from "@auth/auth.module";
 import { PizzaModule } from "@pizza/pizza.module";
 import { TokenModule } from "@token/token.module";
 import { MailModule } from "@mail/mail.module";
+import { RestaurantModule } from "@restaurant/restaurant.module";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MailModule } from "@mail/mail.module";
     AuthModule,
     configModule,
     PizzaModule,
+    RestaurantModule,
     TokenModule,
     MailModule,
     MongooseModule.forRootAsync({

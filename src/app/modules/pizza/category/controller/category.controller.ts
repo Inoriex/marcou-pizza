@@ -42,8 +42,8 @@ export class CategoryController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "created category successfully" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
-  async createCategory(@Res() res, @Body() categorydto: CategoryDTO) {
-    const category = await this.categoryService.createCategory(categorydto);
+  async createCategory(@Res() res, @Body() categoryDTO: CategoryDTO) {
+    const category = await this.categoryService.createCategory(categoryDTO);
     return res.status(HttpStatus.OK).json({
       message: "Category has been created successfully",
       data: category,
@@ -56,8 +56,8 @@ export class CategoryController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "category updated successfully" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
-  async updateCategory(@Res() res, @Body() categorydto: Partial<CategoryDTO>, @Param("categoryId", new ValidateObjectId()) categoryId) {
-    const category = await this.categoryService.updateCategory(categoryId, categorydto);
+  async updateCategory(@Res() res, @Body() categoryDTO: Partial<CategoryDTO>, @Param("categoryId", new ValidateObjectId()) categoryId) {
+    const category = await this.categoryService.updateCategory(categoryId, categoryDTO);
     return res.status(HttpStatus.OK).json({
       message: "Category has been updated successfully",
       data: category,
