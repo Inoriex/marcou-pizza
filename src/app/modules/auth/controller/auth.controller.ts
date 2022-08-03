@@ -1,8 +1,7 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards, ValidationPipe, Query, Patch, Logger} from "@nestjs/common";
-import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards, ValidationPipe, Query, Patch, Logger, UseInterceptors } from "@nestjs/common";
+import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "@auth/service/auth.service";
 import { CreateUserDto } from "@user/dto/create-user.dto";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { ConfirmAccountDto } from "@auth/dto/confirm-account.dto";
 import { SignInDto } from "@auth/dto/signin.dto";
 import { IReadableUser } from "@user/interfaces/readable-user.interface";
@@ -12,9 +11,12 @@ import { GetUser } from "@/components/decorators/get-user.decorator";
 import { IUser } from "@user/interfaces/user.interface";
 import { ChangePasswordDto } from "@auth/dto/change-password.dto";
 import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
+import MongooseClassSerializerInterceptor from "@/utils/mongooseClassSerializer.interceptor";
+import { User } from "@user/schema/user.schema";
 
 @ApiTags("auth")
 @Controller("auth")
+// @UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -23,7 +25,7 @@ export class AuthController {
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "unable to create user" })
   @Post("/signUp")
-  async signUp(@Body(new ValidationPipe()) createUserDto: CreateUserDto): Promise<boolean> {
+  async signUp(@Body(new ValidationPipe()) createUserDto: CreateUserDto): Promise<boolean | void> {
     return this.authService.signUp(createUserDto);
   }
 
@@ -39,7 +41,6 @@ export class AuthController {
   @ApiInternalServerErrorResponse({ description: "unable to log user" })
   @Post("/signIn")
   async signIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<IReadableUser> {
-    Logger.log(signInDto);
     return await this.authService.signIn(signInDto);
   }
 

@@ -6,7 +6,7 @@ import { Ingredient } from "../schema/ingredient.schema";
 
 @Injectable()
 export class IngredientService {
-  constructor(@InjectModel("ingredient") private readonly ingredientModel: Model<Ingredient>) {}
+  constructor(@InjectModel("Ingredient") private readonly ingredientModel: Model<Ingredient>) {}
   async getAllIngredient(): Promise<Ingredient[]> {
     return await this.ingredientModel.find({}).exec();
     // OR findOne(ingredient => ingredient.name === ingredientName);

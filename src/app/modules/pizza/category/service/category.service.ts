@@ -6,7 +6,7 @@ import { Category } from "../schema/category.schema";
 
 @Injectable()
 export class CategoryService {
-  constructor(@InjectModel("category") private readonly categoryModel: Model<Category>) {}
+  constructor(@InjectModel("Category") private readonly categoryModel: Model<Category>) {}
   async getAllCategory(): Promise<Category[]> {
     return await this.categoryModel.find({}).exec();
     // OR findOne(category => category.name === categoryName);
@@ -25,7 +25,7 @@ export class CategoryService {
     return await this.categoryModel.findByIdAndUpdate(categoryId, category, { new: true });
   }
   async deleteCategory(categoryId: string): Promise<Category> {
-    return await this.categoryModel.findByIdAndUpdate(categoryId, { active: false });
+    return await this.categoryModel.findByIdAndDelete(categoryId, { active: false });
   }
   async createCategory(category: CategoryDTO): Promise<Category> {
     const existingCategory = await this.categoryModel.find({ name: category.name }).exec();

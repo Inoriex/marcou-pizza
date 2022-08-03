@@ -1,12 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards } from "@nestjs/common";
-import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards, UseInterceptors } from "@nestjs/common";
+import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
 import { IngredientDTO } from "@pizza/ingredient/dto/ingredient.dto";
 import { IngredientService } from "@pizza/ingredient/service/ingredient.service";
 import { ValidateObjectId } from "@pizza/pipe/id.pipe";
+import MongooseClassSerializerInterceptor from "@/utils/mongooseClassSerializer.interceptor";
+import { Ingredient } from "@pizza/ingredient/schema/ingredient.schema";
 
 //localhost:3000/api/ingredient/
+@ApiTags("api/ingredient")
 @Controller("api/ingredient")
+@UseInterceptors(MongooseClassSerializerInterceptor(Ingredient))
 export class IngredientController {
   constructor(private ingredientService: IngredientService) {}
 
@@ -42,8 +46,8 @@ export class IngredientController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "created ingredient successfully" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
-  async createIngredient(@Res() res, @Body() ingredientdto: IngredientDTO) {
-    const ingredient = await this.ingredientService.createIngredient(ingredientdto);
+  async createIngredient(@Res() res, @Body() ingredientDTO: IngredientDTO) {
+    const ingredient = await this.ingredientService.createIngredient(ingredientDTO);
     return res.status(HttpStatus.OK).json({
       message: "Ingredient has been created successfully",
       data: ingredient,

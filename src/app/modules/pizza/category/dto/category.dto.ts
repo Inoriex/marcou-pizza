@@ -1,4 +1,5 @@
+import { ObjectId } from "mongoose";
 export class CategoryDTO {
-  _id: number;
+  _id: string;
   name: string;
 }

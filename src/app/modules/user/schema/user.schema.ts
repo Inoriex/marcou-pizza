@@ -1,34 +1,25 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Exclude, Transform, Type } from "class-transformer";
 import { MinLength } from "class-validator";
-import { IAddress } from "../interfaces/address.interface";
-import mongoose, { Document, ObjectId, Types, Schema as MongooseSchema } from "mongoose";
+import { Document, ObjectId, Schema as MongooseSchema } from "mongoose";
 import { genderEnum } from "@user/enums/gender.enum";
 import { roleEnum } from "@user/enums/role.enum";
 import { statusEnum } from "@user/enums/status.enum";
+import { Address } from "./address.schema";
 
 export type UserDocument = User & Document;
-export type AddressDocument = Address & Document;
 
-@Schema()
-export class Address extends Document {
-  @Prop({ required: true })
-  country: string;
-  @Prop()
-  city: string;
-  @Prop()
-  addressLine1: string;
-  @Prop()
-  addressLine2: string;
-}
-export const AddressSchema = SchemaFactory.createForClass(Address);
-
-@Schema()
+@Schema({
+  toJSON: {
+    getters: true,
+    virtuals: true,
+  },
+})
 export class User {
   static passwordMinLength = 7;
 
   @Transform(({ value }) => value.toString())
-  _id: ObjectId;
+  _id: string;
 
   @Prop({ unique: true })
   email: string;
@@ -56,8 +47,9 @@ export class User {
   @Exclude()
   password: string;
 
-  @Prop({ type: AddressSchema })
-  address: IAddress;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Address" })
+  @Type(() => Address)
+  address: Address;
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
@@ -65,3 +57,8 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.index({ firstName: "text", lastName: "text" });
+
+UserSchema.virtual("fullName").get(function (this: User) {
+  return `${this.firstName} ${this.lastName}`;
+});
