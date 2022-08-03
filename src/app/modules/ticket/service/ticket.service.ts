@@ -2,8 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Ticket } from "../schema/ticket.schema";
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
+
 
 @Injectable()
 export class TicketService {
@@ -16,7 +15,8 @@ export class TicketService {
     return await this.ticketModel.findById(ticketId);
   }
 
-  async ticketCommercant(createTicketCm: string): Promise<AppModule> {
-    return await NestFactory.create(createTicketCm);
+  async ticketCommercant(createTicketCm: string): Promise<Ticket> {
+    const ticket = new this.ticketModel(createTicketCm);
+    return ticket.save();
   }
 }

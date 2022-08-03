@@ -1,14 +1,12 @@
-import { TicketService } from "./../service/ticket.service";
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, RequestMethod, Res, UseGuards } from "@nestjs/common";
 import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse } from "@nestjs/swagger";
 import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
 import { TicketService } from "../service/ticket.service";
-import { RestaurantService } from "../../restaurant/service/restaurant.service";
 
 // Localhost:3000/pizzas/
 @Controller("ticket")
 export class TicketController {
-  contructor(private ticketService: TicketService) {}
+  constructor(private ticketService: TicketService) {}
 
   @UseGuards(JwtAuthGuard)
   // middleware qui verifie le webtoken, session toujours valide
