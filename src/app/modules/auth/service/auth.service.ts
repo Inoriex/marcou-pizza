@@ -35,7 +35,7 @@ export class AuthService {
   ) {
     this.clientAppUrl = this.configService.get<string>("FE_APP_URL");
   }
-
+  // Rajouter l'addresse
   async signUp(createUserDto: CreateUserDto): Promise<boolean> {
     const token = Math.floor(1000 + Math.random() * 9000).toString();
     const user = await this.userService.create(createUserDto, [roleEnum.user]);
@@ -44,8 +44,7 @@ export class AuthService {
   }
 
   async signIn({ email, password }: SignInDto): Promise<IReadableUser> {
-    const user = await this.userService.findByEmail(email).catch(err => Logger.log(err));
-
+    const user = await this.userService.findByEmail(email);
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = await this.signUser(user);
       const readableUser = user.toObject() as IReadableUser;

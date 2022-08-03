@@ -15,6 +15,16 @@ export class CreateAddressDto {
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
+  readonly name: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  readonly cp: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
   readonly addressLine1: string;
 
   @IsString()

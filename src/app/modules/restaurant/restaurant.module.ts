@@ -4,9 +4,18 @@ import { LoggerModule } from "@logger/logger.module";
 import { RestaurantController } from "./controller/restaurant.controller";
 import { RestaurantSchema } from "./schema/restaurant.schema";
 import { RestaurantService } from "./service/restaurant.service";
+import { UserModule } from "@user/user.module";
+import { AddressSchema } from "@user/schema/address.schema";
 
 @Module({
-  imports: [LoggerModule, MongooseModule.forFeature([{ name: "restaurant", schema: RestaurantSchema }])],
+  imports: [
+    LoggerModule,
+    UserModule,
+    MongooseModule.forFeature([
+      { name: "Restaurant", schema: RestaurantSchema },
+      { name: "Address", schema: AddressSchema },
+    ]),
+  ],
   controllers: [RestaurantController],
   providers: [RestaurantService],
   exports: [RestaurantService],
