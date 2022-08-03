@@ -6,8 +6,5 @@ export class createTicketDTO {
   orderId: string;
 
   @IsString()
-  ticket: string;
-
-  @IsString()
   userId: string;
 }

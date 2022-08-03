@@ -12,7 +12,7 @@ import { User } from "@user/schema/user.schema";
 
 @ApiTags("api/user")
 @Controller("api/user")
-@UseInterceptors(MongooseClassSerializerInterceptor(User))
+// @UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

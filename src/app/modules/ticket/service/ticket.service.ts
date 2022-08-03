@@ -12,7 +12,13 @@ export class TicketService {
   }
 
   async getTicket(ticketId: string): Promise<Ticket> {
-    return await this.ticketModel.findById(ticketId);
+    return await this.ticketModel.findById(ticketId).exec();
+  }
+  async getUserTicket(userId: string, ticketId: string): Promise<Ticket> {
+    return await this.ticketModel.findOne({ _id: ticketId, user: userId }).exec();
+  }
+  async getAllUserTickets(userId: string): Promise<Ticket[]> {
+    return await this.ticketModel.find({ user: userId }).exec();
   }
 
   async createTicket(ticket: createTicketDTO): Promise<Ticket> {
