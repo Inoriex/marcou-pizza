@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
 export class CategoryDTO {
-  _id: ObjectId;
+  _id: string;
   name: string;
 }

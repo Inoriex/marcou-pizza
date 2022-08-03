@@ -15,7 +15,7 @@ export type PizzaDocument = Pizza & mongoose.Document;
 })
 export class Pizza extends Document {
   @Transform(({ value }) => value.toString())
-  _id: ObjectId;
+  _id: string;
   @Prop()
   name: string;
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: Category.name })

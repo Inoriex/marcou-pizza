@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards } from "@nestjs/common";
-import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards, UseInterceptors } from "@nestjs/common";
+import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
 import { UserService } from "@user/service/user.service";
 import * as bcrypt from "bcrypt";
@@ -7,8 +7,12 @@ import { IUser } from "@user/interfaces/user.interface";
 import { GetUser } from "@/components/decorators/get-user.decorator";
 import { IAddress } from "../interfaces/address.interface";
 import { CreateAddressDto } from "@user/dto/create-address.dto";
+import MongooseClassSerializerInterceptor from "@/utils/mongooseClassSerializer.interceptor";
+import { User } from "@user/schema/user.schema";
 
+@ApiTags("api/user")
 @Controller("api/user")
+@UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

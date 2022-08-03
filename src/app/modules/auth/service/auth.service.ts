@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, MethodNotAllowedException, UnauthorizedException, Logger } from "@nestjs/common";
+import { BadRequestException, Injectable, MethodNotAllowedException, UnauthorizedException, Logger, HttpException, HttpStatus } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 import * as _ from "lodash";
 import * as moment from "moment";
@@ -21,6 +21,7 @@ import { userSensitiveFieldsEnum } from "@user/enums/protected-fields.enum";
 import { ForgotPasswordDto } from "@auth/dto/forgot-password.dto";
 import { IUserToken } from "@token/interfaces/user-token.interface";
 import { JwtService } from "@nestjs/jwt";
+import MongoError from "@/utils/mongoError.enum";
 
 @Injectable()
 export class AuthService {
@@ -36,12 +37,18 @@ export class AuthService {
     this.clientAppUrl = this.configService.get<string>("FE_APP_URL");
   }
   // Rajouter l'addresse
-  async signUp(createUserDto: CreateUserDto): Promise<boolean> {
+  async signUp(createUserDto: CreateUserDto): Promise<boolean | void> {
     const token = Math.floor(1000 + Math.random() * 9000).toString();
-    const user = await this.userService.create(createUserDto, [roleEnum.user]);
-    // await this.mailService.sendUserConfirmation(user, token);
-    return true;
+    try {
+      await this.userService.create(createUserDto, [roleEnum.user]);
+    } catch (error) {
+      if (error?.code === MongoError.DuplicateKey) {
+        throw new HttpException("User with that email already exists", HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
+  // await this.mailService.sendUserConfirmation(user, token);
 
   async signIn({ email, password }: SignInDto): Promise<IReadableUser> {
     const user = await this.userService.findByEmail(email);

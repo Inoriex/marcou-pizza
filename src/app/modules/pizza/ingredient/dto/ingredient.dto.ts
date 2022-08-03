@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
 export interface IngredientDTO {
-  _id: ObjectId;
+  _id: string;
   name: string;
 }

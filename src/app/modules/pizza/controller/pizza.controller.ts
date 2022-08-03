@@ -1,11 +1,15 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards, Logger } from "@nestjs/common";
-import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards, Logger, UseInterceptors } from "@nestjs/common";
+import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
 import { PizzaDTO } from "../dto/pizza.dto";
 import { PizzaService } from "../service/pizza.service";
+import MongooseClassSerializerInterceptor from "@/utils/mongooseClassSerializer.interceptor";
+import { Pizza } from "@pizza/schema/pizza.schema";
 
 // Localhost:3000/pizza/
+@ApiTags("api/pizza")
 @Controller("api/pizza")
+@UseInterceptors(MongooseClassSerializerInterceptor(Pizza))
 export class PizzaController {
   constructor(private pizzaService: PizzaService) {}
 

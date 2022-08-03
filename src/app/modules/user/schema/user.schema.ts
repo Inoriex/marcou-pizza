@@ -19,7 +19,7 @@ export class User {
   static passwordMinLength = 7;
 
   @Transform(({ value }) => value.toString())
-  _id: ObjectId;
+  _id: string;
 
   @Prop({ unique: true })
   email: string;

@@ -1,12 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards } from "@nestjs/common";
-import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards, UseInterceptors } from "@nestjs/common";
+import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
 import { CategoryDTO } from "../dto/category.dto";
 import { ValidateObjectId } from "@pizza/pipe/id.pipe";
 import { CategoryService } from "../service/category.service";
+import { Category } from "@pizza/category/schema/category.schema";
+import MongooseClassSerializerInterceptor from "@/utils/mongooseClassSerializer.interceptor";
 
-//localhost:3000/api/categories/
+//localhost:3000/api/category/
+@ApiTags("api/category")
 @Controller("api/category")
+// @UseInterceptors(MongooseClassSerializerInterceptor(Category))
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
 

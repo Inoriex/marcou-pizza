@@ -7,7 +7,7 @@ export type IngredientDocument = Ingredient & Document;
 @Schema()
 export class Ingredient {
   @Transform(({ value }) => value.toString())
-  _id: ObjectId;
+  _id: string;
 
   @Prop({ unique: true })
   name: string;
