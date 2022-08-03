@@ -1,8 +1,8 @@
+import { createTicketDTO } from "./../dto/ticket.dto";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Ticket } from "../schema/ticket.schema";
-
 
 @Injectable()
 export class TicketService {
@@ -15,8 +15,8 @@ export class TicketService {
     return await this.ticketModel.findById(ticketId);
   }
 
-  async ticketCommercant(createTicketCm: string): Promise<Ticket> {
-    const ticket = new this.ticketModel(createTicketCm);
-    return ticket.save();
+  async createTicket(ticket: createTicketDTO): Promise<Ticket> {
+    const newTicket = new this.ticketModel(ticket);
+    return newTicket.save();
   }
 }
