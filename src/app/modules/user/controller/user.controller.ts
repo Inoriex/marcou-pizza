@@ -21,14 +21,14 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully fetched" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
-  @ApiInternalServerErrorResponse({ description: "unable to fetch user address" })
+  @ApiInternalServerErrorResponse({ description: "unable to fetch user addresses" })
   getUserAddresses(@GetUser() user: IUser) {
     const userId = user._id;
     return this.userService.getUserAddresses(userId);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post("/address")
+  @Post("/address/create")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully created" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
@@ -38,7 +38,7 @@ export class UserController {
     return this.userService.createAddress(address, userId);
   }
   @UseGuards(JwtAuthGuard)
-  @Put("/:addressId")
+  @Put("address/:addressId")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully created" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
@@ -48,7 +48,7 @@ export class UserController {
     return this.userService.updateAddress(addressId, address, userId);
   }
   @UseGuards(JwtAuthGuard)
-  @Delete("/:addressId")
+  @Delete("address/:addressId")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully created" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })

@@ -17,14 +17,13 @@ export class RestaurantService {
   async getRestaurant(restaurantId: string): Promise<Restaurant> {
     return await this.restaurantModel.findById(restaurantId).populate("address");
   }
-  async createRestaurant(restaurant: CreateRestaurantDTO): Promise<Restaurant> {
-    const existingRestaurant = await this.restaurantModel.find({ title: restaurant.title }).exec();
+  async createRestaurant(restaurant: CreateRestaurantDTO, userId: string): Promise<Restaurant> {
+    const existingRestaurant = await this.restaurantModel.find({ ...restaurant, user: userId }).exec();
     if (existingRestaurant && existingRestaurant.length > 0) {
       return existingRestaurant[0];
     }
-    const newAddress = await new this.restaurantModel(restaurant).populate("address");
-    newAddress.populate("user");
-    return newAddress.save();
+    const newRestaurant = await new this.restaurantModel(restaurant).populate("address");
+    return newRestaurant.save();
   }
 
   async updateRestaurant(restaurantId: string, restaurantDto: Partial<RestaurantDTO>): Promise<Restaurant> {

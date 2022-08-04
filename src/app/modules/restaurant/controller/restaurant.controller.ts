@@ -19,7 +19,7 @@ export class RestaurantController {
   @UseGuards(JwtAuthGuard)
   // middleware qui verifie le webtoken, session toujours valide
   //localhost:3000/pizzas/list
-  @Get("/restaurant")
+  @Get("/address")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "Récupération de l'address OK 👌 " })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
@@ -37,9 +37,9 @@ export class RestaurantController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "created address successfully" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
-  async createAddress(@GetUser() user: IUser, @Res() res, @Body() restaurantDTO: RestaurantDTO) {
+  async createRestaurant(@GetUser() user: IUser, @Res() res, @Body() restaurantDTO: RestaurantDTO) {
     const address = await this.userService.createAddress(restaurantDTO.address, user._id);
-    const restaurant = await this.restaurantService.createRestaurant({ ...restaurantDTO, address: address._id });
+    const restaurant = await this.restaurantService.createRestaurant({ ...restaurantDTO, address: address._id }, user._id);
     return res.status(HttpStatus.OK).json({
       message: "L’adresse a été récupéré avec succès ",
       data: restaurant,
@@ -53,8 +53,25 @@ export class RestaurantController {
   @ApiOkResponse({ description: "L'adresse a été updated avec succès" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "impossible de récupérer les détails de l'address" })
-  async updateRestaurant(@Res() res, @Body() restaurantDTO: Partial<RestaurantDTO>, @Param("restaurantId") restaurantId) {
+  async updateRestaurant(@Res() res, @GetUser() user: IUser, @Body() restaurantDTO: Partial<RestaurantDTO>, @Param("restaurantId") restaurantId) {
+    const addressId = await this.restaurantService.getRestaurant(restaurantId);
+    console.log(addressId);
+    const address = await this.userService.updateAddress(addressId.address._id, restaurantDTO.address, user._id);
     const restaurant = await this.restaurantService.updateRestaurant(restaurantId, restaurantDTO);
+    return res.status(HttpStatus.OK).json({
+      message: "Le restaurant a été récupéré avec succès ",
+      data: { ...restaurant, address: address },
+    });
+  }
+  // @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard)
+  @Get("/:restaurantId")
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ description: "Le restaurant a été récupéré avec succès" })
+  @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
+  @ApiInternalServerErrorResponse({ description: "impossible de récupérer les détails du restaurant" })
+  async getRestaurant(@Res() res, @Param("restaurantId") restaurantId) {
+    const restaurant = await this.restaurantService.getRestaurant(restaurantId);
     return res.status(HttpStatus.OK).json({
       message: "Le restaurant a été récupéré avec succès ",
       data: restaurant,

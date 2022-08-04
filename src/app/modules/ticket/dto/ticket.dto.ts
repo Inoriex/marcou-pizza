@@ -1,3 +1,4 @@
+
 import { IsString, IsNotEmpty } from "class-validator";
 
 export class createTicketDTO {
@@ -8,3 +9,6 @@ export class createTicketDTO {
   @IsString()
   userId: string;
 }
+
+export class createTicketDTO {}
+

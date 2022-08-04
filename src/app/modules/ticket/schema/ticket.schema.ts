@@ -20,6 +20,11 @@ export class Ticket extends Document {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: "User" })
   @Type(() => User)
   user: User;
+  ticket: ticketEnum;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Order" })
+  @Type(() => Order)
+  order: Order; */
 }
 
 export const TicketSchema = SchemaFactory.createForClass(Ticket);

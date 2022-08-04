@@ -1,7 +1,9 @@
 import { Ticket } from "../../ticket/schema/ticket.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Schema as MongooseSchema } from "mongoose";
-import { Transform, Type } from "class-transformer";
+
+import { Document } from "mongoose";
+import { Transform } from "class-transformer";
+
 // import { PaimentDTO } from "../dto/paiment.dto";
 export type PaimentDocument = Paiment & Document;
 
