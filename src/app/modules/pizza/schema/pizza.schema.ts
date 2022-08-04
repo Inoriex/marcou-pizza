@@ -29,6 +29,8 @@ export class Pizza extends Document {
   price_G: number;
   @Prop()
   description?: number;
+  @Prop()
+  dispo: boolean;
   @Prop({
     type: [{ type: MongooseSchema.Types.ObjectId, ref: Ingredient.name }],
   })
