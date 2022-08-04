@@ -3,7 +3,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Ticket } from "../schema/ticket.schema";
 
-
 @Injectable()
 export class TicketService {
   constructor(@InjectModel("Ticket") private readonly ticketModel: Model<Ticket>) {}

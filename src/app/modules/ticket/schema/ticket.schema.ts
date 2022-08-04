@@ -10,12 +10,12 @@ export class Ticket extends Document {
   @Transform(({ value }) => value.toString())
   _id: string;
 
-  @Prop({ type: String, required: true, enum: Object.values(ticketEnum) })
+  /*  @Prop({ type: String, required: true, enum: Object.values(ticketEnum) })
   ticket: ticketEnum;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Order" })
   @Type(() => Order)
-  order: Order;
+  order: Order; */
 }
 
 export const TicketSchema = SchemaFactory.createForClass(Ticket);

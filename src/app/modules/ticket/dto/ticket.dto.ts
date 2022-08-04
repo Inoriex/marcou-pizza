@@ -1,3 +1,1 @@
-export class createTicketDTO {
-    
-}
+export class createTicketDTO {}
