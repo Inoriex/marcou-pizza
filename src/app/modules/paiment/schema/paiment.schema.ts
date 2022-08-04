@@ -1,6 +1,9 @@
+import { Ticket } from "../../ticket/schema/ticket.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+
 import { Document } from "mongoose";
 import { Transform } from "class-transformer";
+
 // import { PaimentDTO } from "../dto/paiment.dto";
 export type PaimentDocument = Paiment & Document;
 
@@ -9,12 +12,12 @@ export class Paiment extends Document {
   @Transform(({ value }) => value.tostring())
   _id: string;
 
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Ticket" })
+  @Type(() => Ticket)
+  ticketId: Ticket;
+
   @Prop()
-  //   ticketclient: PaimentDTO["ticketclient"];
-  @Prop()
-  //   ticketcommercant: PaimentDTO["ticketcommercant"];
-  @Prop()
-  date: string;
+  date: Date;
 
   @Prop()
   num: string;

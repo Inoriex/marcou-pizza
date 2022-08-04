@@ -19,6 +19,9 @@ export class PizzaDTO {
   @IsString()
   description?: string;
 
+  @IsString()
+  dispo?: string;
+
   category: string;
   ingredients: string[];
 }

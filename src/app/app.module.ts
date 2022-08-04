@@ -13,6 +13,7 @@ import { PizzaModule } from "@pizza/pizza.module";
 import { TokenModule } from "@token/token.module";
 import { MailModule } from "@mail/mail.module";
 import { RestaurantModule } from "@restaurant/restaurant.module";
+import { Module } from './modules/.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { RestaurantModule } from "@restaurant/restaurant.module";
         return options;
       },
     }),
+    Module,
   ],
 })
 export class AppModule {}

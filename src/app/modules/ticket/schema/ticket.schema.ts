@@ -1,4 +1,4 @@
-import { ticketEnum } from "../enums/ticket.enums";
+import { User } from "@user/schema/user.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as MongooseSchema } from "mongoose";
 import { Transform, Type } from "class-transformer";
@@ -11,6 +11,15 @@ export class Ticket extends Document {
   _id: string;
 
   /*  @Prop({ type: String, required: true, enum: Object.values(ticketEnum) })
+  ticket: ticketEnum; */
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Order" })
+  @Type(() => Order)
+  order: Order;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "User" })
+  @Type(() => User)
+  user: User;
   ticket: ticketEnum;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Order" })
