@@ -7,7 +7,7 @@ import { IUser } from "@user/interfaces/user.interface";
 
 @ApiTags("api/paiment")
 @Controller("api/paiment")
-export class ticketController {
+export class PaimentController {
   constructor(private paimentService: PaimentService) {}
 
   @UseGuards(JwtAuthGuard)
