@@ -9,7 +9,7 @@ import { Pizza } from "@pizza/schema/pizza.schema";
 // Localhost:3000/pizza/
 @ApiTags("api/pizza")
 @Controller("api/pizza")
-@UseInterceptors(MongooseClassSerializerInterceptor(Pizza))
+// @UseInterceptors(MongooseClassSerializerInterceptor(Pizza))
 export class PizzaController {
   constructor(private pizzaService: PizzaService) {}
 

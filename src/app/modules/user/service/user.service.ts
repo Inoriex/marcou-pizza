@@ -36,21 +36,16 @@ export class UserService {
     return await this.userModel.findOne({ email }).populate("address").exec();
   }
   async update(id: string, payload: Partial<IUser>) {
-    return this.userModel.updateOne({ _id: id }, payload).populate("address");
+    return this.userModel.findOneAndUpdate({ _id: id }, payload).populate("address");
   }
 
   async createAddress(address: CreateAddressDto, userId: string): Promise<Address> {
-    const existingAddress = await this.addressModel
-      .find({
-        name: address.name,
-        addressLine1: address.addressLine1,
-        addressLine2: address.addressLine2,
-      })
-      .exec();
+    const existingAddress = await this.addressModel.find({ ...address, user: userId }).exec();
+    console.log(existingAddress);
     if (existingAddress && existingAddress.length > 0) {
       return existingAddress[0];
     }
-    const newAddress = await new this.addressModel({ ...address, user: userId }).populate("user");
+    const newAddress = await new this.addressModel({ ...address, user: userId });
     return newAddress.save();
   }
   async getAllAddress(): Promise<Address[]> {
@@ -60,14 +55,16 @@ export class UserService {
   async getAddress(addressId: string): Promise<Address> {
     return await this.addressModel.findById(addressId).populate("user");
   }
+  async getRestaurantAddress(restaurantId: string): Promise<Address> {
+    return await this.addressModel.findById(restaurantId);
+  }
   async getUserAddresses(userId: string): Promise<Address[]> {
     return await this.addressModel.find({ user: userId });
   }
   async updateAddress(addressId: string, payload: Partial<CreateAddressDto>, userId: string): Promise<Address> {
-    return this.userModel.updateOne({ _id: addressId, user: userId }, payload).populate("user");
+    return this.addressModel.findOneAndUpdate({ _id: addressId, user: userId }, payload, { new: true });
   }
   async deleteAddress(addressId: string, userId: string) {
-    return this.userModel.updateOne({ _id: addressId, user: userId });
-    return await this.userModel.findByIdAndDelete(addressId, { active: false });
+    return await this.addressModel.findOneAndDelete({ _id: addressId, user: userId }, { active: false });
   }
 }

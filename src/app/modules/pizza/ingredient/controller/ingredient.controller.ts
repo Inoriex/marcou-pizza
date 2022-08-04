@@ -10,7 +10,7 @@ import { Ingredient } from "@pizza/ingredient/schema/ingredient.schema";
 //localhost:3000/api/ingredient/
 @ApiTags("api/ingredient")
 @Controller("api/ingredient")
-@UseInterceptors(MongooseClassSerializerInterceptor(Ingredient))
+// @UseInterceptors(MongooseClassSerializerInterceptor(Ingredient))
 export class IngredientController {
   constructor(private ingredientService: IngredientService) {}
 
