@@ -17,7 +17,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "resolveJsonModule":true,
+    "resolveJsonModule": true,
     "paths": {
       "@/*": ["src/*"],
       "@app/*": ["src/app/*"],
@@ -29,7 +29,9 @@
       "@components/*": ["src/components/*"],
       "@restaurant/*": ["src/app/modules/restaurant/*"],
       "@token/*": ["src/app/modules/token/*"],
-      "@mail/*": ["src/app/modules/mail/*"]
+      "@mail/*": ["src/app/modules/mail/*"],
+      "@order/*": ["src/app/modules/order/*"],
+      "@ticket/*": ["src/app/modules/ticket/*"]
     }
   }
 }
