@@ -26,7 +26,7 @@ export class RestaurantService {
   }
   async updateRestaurant(restaurantId: string, restaurantDto: Partial<RestaurantDTO>, userId: string): Promise<Restaurant> {
     const restaurant = await this.restaurantModel.findById(restaurantId).exec();
-    console.log(restaurantDto, userId)
+    console.log(restaurantDto, userId);
     await this.userService.updateAddress(restaurant.address._id, restaurantDto.address, userId);
     return await this.restaurantModel.findByIdAndUpdate(restaurantId, restaurantDto, { new: true }).populate("address");
   }
