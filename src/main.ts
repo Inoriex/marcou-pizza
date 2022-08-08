@@ -1,9 +1,9 @@
 import { NestApplicationOptions } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { SwaggerModule } from "@nestjs/swagger";
-import { AppModule } from "./app/app.module";
-import { ConfigService } from "./config/config.service";
-import { Logger } from "./logger/logger";
+import { AppModule } from "./app.module";
+import { ConfigService } from "@config/config.service";
+import { Logger } from "@logger/logger";
 import { createDocument } from "./swagger/swagger";
 import * as admin from "firebase-admin";
 import * as dotenv from "dotenv";

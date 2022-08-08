@@ -20,18 +20,17 @@
     "resolveJsonModule": true,
     "paths": {
       "@/*": ["src/*"],
-      "@app/*": ["src/app/*"],
-      "@pizza/*": ["src/app/modules/pizza/*"],
-      "@user/*": ["src/app/modules/user/*"],
-      "@auth/*": ["src/app/modules/auth/*"],
+      "@pizza/*": ["src/pizza/*"],
+      "@user/*": ["src/user/*"],
+      "@auth/*": ["src/auth/*"],
       "@config/*": ["src/config/*"],
       "@logger/*": ["src/logger/*"],
       "@components/*": ["src/components/*"],
-      "@restaurant/*": ["src/app/modules/restaurant/*"],
-      "@token/*": ["src/app/modules/token/*"],
-      "@mail/*": ["src/app/modules/mail/*"],
-      "@order/*": ["src/app/modules/order/*"],
-      "@ticket/*": ["src/app/modules/ticket/*"]
+      "@restaurant/*": ["src/restaurant/*"],
+      "@token/*": ["src/token/*"],
+      "@mail/*": ["src/mail/*"],
+      "@order/*": ["src/order/*"],
+      "@ticket/*": ["src/ticket/*"],
     }
   }
 }

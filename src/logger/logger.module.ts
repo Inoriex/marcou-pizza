@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
-import { AppConfigurationModule } from "../config/app-configuration.module";
+import { AppConfigurationModule } from "@config/app/config.module";
 import { Logger } from "./logger";
 import { LoggerMiddleware } from "./logger.middleware";
 
