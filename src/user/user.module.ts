@@ -1,11 +1,11 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { UserController } from "@user/user.controller";
-import { UserSchema } from "@user/schema/user.schema";
+import { UserSchema } from "@user/schemas/user.schema";
 import { UserService } from "@user/user.service";
-import { AddressSchema } from "@user/schema/address.schema";
+import { AddressSchema } from "@user/schemas/address.schema";
 import { AuthModule } from "@auth/auth.module";
-import { ForgotPasswordSchema } from "./schema/forgot-password.schema";
+import { ForgotPasswordSchema } from "./schemas/forgot-password.schema";
 
 @Module({
   imports: [

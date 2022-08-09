@@ -20,50 +20,51 @@ import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
 @UseGuards(RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
   @UseGuards(JwtAuthGuard)
   @Get("/me")
   me(@Req() request) {
-    const userId = request.user._id;
+    const userId = request.user.id;
     return this.userService.find(userId);
   }
+  @UseGuards(JwtAuthGuard)
   @Get("/address")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully fetched" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "unable to fetch user address" })
   getUserAddresses(@GetUser() user: User) {
-    const userId = user._id;
+    const userId = user.id;
+    console.log(userId);
     return this.userService.getUserAddresses(userId);
   }
-
-  @Post("/address")
+  @UseGuards(JwtAuthGuard)
+  @Post("address/create")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully created" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "unable to create user address" })
-  CreateUserAddress(@GetUser() user: User, @Body() address: CreateAddressDto) {
-    const userId = user._id;
-    return this.userService.createAddress(address);
+  CreateUserAddress(@Req() req, @GetUser() user: User, @Body() address: CreateAddressDto) {
+    const userId = user.id;
+    return this.userService.addAddress(address, userId);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Put("/:addressId")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully created" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "unable to create user address" })
   UpdateUserAddress(@GetUser() user: User, @Body() address: Partial<CreateAddressDto>, @Param("addressId") addressId: string) {
-    const userId = user._id;
+    const userId = user.id;
     return this.userService.updateAddress(addressId, address, userId);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Delete("/:addressId")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully created" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "unable to create user address" })
   DeleteUserAddress(@GetUser() user: User, @Param("addressId") addressId: string) {
-    const userId = user._id;
+    const userId = user.id;
     return this.userService.deleteAddress(addressId, userId);
   }
 
@@ -74,9 +75,11 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ description: "Register user" })
   @ApiCreatedResponse({})
-  async register(@Body() createUserDto: CreateUserDto) {
+  async register(@GetUser() user: User, @Body() createUserDto: CreateUserDto) {
+    const userId = user.id;
     const address = await this.userService.createAddress(createUserDto.address);
-    return await this.userService.create({ ...createUserDto, address: address._id });
+    const { address: _, ...createUser } = createUserDto;
+    return await this.userService.create({ ...createUser, addresses: [address._id] });
   }
 
   @Post("verify-email")

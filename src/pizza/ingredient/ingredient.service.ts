@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { IngredientDTO } from "./dto/ingredient.dto";
-import { Ingredient } from "./schema/ingredient.schema";
+import { Ingredient } from "./schemas/ingredient.schema";
 
 @Injectable()
 export class IngredientService {

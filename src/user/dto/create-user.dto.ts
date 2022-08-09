@@ -56,7 +56,7 @@ export class CreateUserDto {
 
   @IsOptional()
   @ApiPropertyOptional()
-  readonly address: string;
+  readonly addresses: string[];
 
   @ApiProperty()
   @IsString()
@@ -78,4 +78,8 @@ export class CreateUserDto {
   @MinLength(5)
   @MaxLength(1024)
   readonly password: string;
+}
+
+export interface Address {
+  address: string;
 }

@@ -3,7 +3,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { LoggerModule } from "@logger/logger.module";
 import { IngredientController } from "./ingredient.controller";
 import { IngredientService } from "./ingredient.service";
-import { IngredientSchema } from "./schema/ingredient.schema";
+import { IngredientSchema } from "./schemas/ingredient.schema";
 
 @Module({
   imports: [LoggerModule, MongooseModule.forFeature([{ name: "Ingredient", schema: IngredientSchema }])],

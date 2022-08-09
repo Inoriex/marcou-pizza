@@ -4,7 +4,6 @@ import { MinLength, MaxLength } from "class-validator";
 import mongoose, { Document, ObjectId, Types, Schema as MongooseSchema } from "mongoose";
 import { genderEnum } from "@user/enums/gender.enum";
 import { roleEnum } from "@user/enums/role.enum";
-import { statusEnum } from "@user/enums/status.enum";
 import { Address } from "./address.schema";
 import * as bcrypt from "bcrypt";
 import * as validator from "validator";
@@ -28,9 +27,6 @@ export class User {
   @Prop({ unique: true })
   email: string;
 
-  @Prop({ type: String, enum: Object.values(statusEnum), default: statusEnum.pending })
-  status: statusEnum;
-
   @Prop({ default: null })
   avatar: string;
 
@@ -53,7 +49,7 @@ export class User {
   @Prop()
   phone: string;
 
-  @Prop({ type: [String], required: true, enum: Object.values(roleEnum) })
+  @Prop({ type: [String], required: true, enum: Object.values(roleEnum), default: ["user"] })
   roles: roleEnum;
 
   @Prop({ validate: validator.isUUID })
@@ -76,9 +72,10 @@ export class User {
   @Exclude()
   password: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Address" })
-  @Type(() => Address)
-  address: Address;
+  @Prop({
+    type: [{ address: { type: MongooseSchema.Types.ObjectId, ref: "Address" } }],
+  })
+  addresses: { address: Address }[];
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);

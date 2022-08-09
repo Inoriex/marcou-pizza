@@ -1,4 +1,4 @@
-import { TicketSchema } from "./schema/ticket.schema";
+import { TicketSchema } from "./schemas/ticket.schema";
 import { TicketService } from "./ticket.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { LoggerModule } from "@logger/logger.module";

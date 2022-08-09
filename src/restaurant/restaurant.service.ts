@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Restaurant } from "@restaurant/schema/restaurant.schema";
+import { Restaurant } from "@restaurant/schemas/restaurant.schema";
 import { RestaurantDTO, CreateRestaurantDTO } from "@restaurant/dto/restaurant.dto";
 import { UserService } from "@user/user.service";
 

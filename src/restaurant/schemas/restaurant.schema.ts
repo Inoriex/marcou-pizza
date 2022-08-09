@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { Document, ObjectId, Types, Schema as MongooseSchema } from "mongoose";
 import { Transform, Type } from "class-transformer";
-import { Address } from "@user/schema/address.schema";
+import { Address } from "@user/schemas/address.schema";
 export type RestaurantDocument = Restaurant & Document;
 
 @Schema()

@@ -8,7 +8,7 @@ import { UserModule } from "@user/user.module";
 import { RefreshTokenSchema } from "./schemas/refresh-token.schema";
 import { MailModule } from "@mail/mail.module";
 import { MongooseModule } from "@nestjs/mongoose";
-import { UserSchema } from "@user/schema/user.schema";
+import { UserSchema } from "@user/schemas/user.schema";
 
 @Module({
   imports: [

@@ -1,14 +1,14 @@
 import { Document } from "mongoose";
 import { IAddress } from "./address.interface";
+import { Address } from "@user/schemas/address.schema";
 
 export interface User extends Document {
   readonly email: string;
-  status: string;
   readonly avatar: string;
   readonly avatarId: string;
   readonly fullName: string;
   readonly gender: string;
-  readonly address: IAddress;
+  readonly addresses: [string];
   readonly phone: string;
   password: string;
   readonly roles: [string];

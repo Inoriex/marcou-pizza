@@ -1,8 +1,7 @@
 import { User } from "@user/interfaces/user.interface";
 import * as _ from "lodash";
 import { CreateUserDto } from "@user/dto/create-user.dto";
-import { statusEnum } from "@user/enums/status.enum";
-import { Address } from "@user/schema/address.schema";
+import { Address } from "@user/schemas/address.schema";
 import { CreateAddressDto } from "@user/dto/create-address.dto";
 import { ResetPasswordDto } from "@user/dto/reset-password.dto";
 import { AuthService } from "@auth/auth.service";
@@ -290,27 +289,40 @@ export class UserService {
     await user.save();
   }
   async find(id: string): Promise<User> {
-    return await this.userModel.findById(id).populate("address").exec();
+    return await this.userModel.findById(id).populate("addresses").exec();
   }
 
   async update(id: string, payload: Partial<User>) {
-    return this.userModel.updateOne({ _id: id }, payload).populate("address");
+    return this.userModel.updateOne({ _id: id }, payload).populate("addresses");
   }
 
   async createAddress(address: CreateAddressDto): Promise<Address> {
-    const existingAddress = await this.addressModel
-      .find({
-        name: address.name,
-        addressLine1: address.addressLine1,
-        addressLine2: address.addressLine2,
-      })
-      .exec();
+    const existingAddress = await this.addressModel.find(address).exec();
     if (existingAddress && existingAddress.length > 0) {
       return existingAddress[0];
     }
-    const newAddress = await new this.addressModel({ ...address });
+    const newAddress = await new this.addressModel(address);
     return newAddress.save();
   }
+  async addAddress(address: CreateAddressDto, userId: string) {
+    let addressId;
+    const existingAddress = await this.addressModel.find(address).exec();
+    const user = await this.userModel.findById({ _id: userId }).exec();
+    if (existingAddress && existingAddress.length > 0) {
+      addressId = existingAddress[0]._id;
+      if (!user.addresses.includes(addressId)) {
+        user.addresses.push(addressId);
+        return await user.save();
+      }
+    } else {
+      const newAddress = new this.addressModel(address);
+      newAddress.save();
+      addressId = newAddress._id;
+      user.addresses.push(addressId);
+      return await user.save();
+    }
+  }
+  // Irrelevant
   async getAllAddress(): Promise<Address[]> {
     return await this.addressModel.find({}).populate("user").exec();
   }
@@ -318,8 +330,17 @@ export class UserService {
   async getAddress(addressId: string): Promise<Address> {
     return await this.addressModel.findById(addressId).populate("user");
   }
-  async getUserAddresses(userId: string): Promise<Address[]> {
-    return await this.addressModel.find({ user: userId });
+  async getUserAddresses(userId: string) {
+    return await this.userModel
+      .findById({ _id: userId })
+      .populate({
+        path: "addresses",
+        populate: {
+          path: "_id",
+          model: "Address",
+        },
+      })
+      .exec();
   }
   async updateAddress(addressId: string, payload: Partial<CreateAddressDto>, userId: string): Promise<Address> {
     return this.userModel.updateOne({ _id: addressId, user: userId }, payload).populate("user");

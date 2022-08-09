@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { Document, ObjectId, Types, Schema as MongooseSchema } from "mongoose";
 import { Transform, Type } from "class-transformer";
-import { Category } from "@pizza/category/schema/category.schema";
-import { Ingredient } from "@pizza/ingredient/schema/ingredient.schema";
+import { Category } from "@pizza/category/schemas/category.schema";
+import { Ingredient } from "@pizza/ingredient/schemas/ingredient.schema";
 
 export type PizzaDocument = Pizza & mongoose.Document;
 
@@ -28,11 +28,11 @@ export class Pizza extends Document {
   description?: number;
   @Prop({ default: true })
   dispo: boolean;
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: Category.name })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Category" })
   @Type(() => Category)
   category: Category;
   @Prop({
-    type: [{ type: MongooseSchema.Types.ObjectId, ref: Ingredient.name }],
+    type: [{ type: MongooseSchema.Types.ObjectId, ref: "Ingredient" }],
   })
   @Type(() => Ingredient)
   ingredients: Ingredient[];

@@ -24,7 +24,6 @@ export class RestaurantController {
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "impossible de récupérer les détails de l'adresse" })
   async getRestaurantsAddress(@Res() res, @Req() req, @GetUser() user) {
-    console.log(req);
     const address = await this.restaurantService.getAllRestaurant();
     return res.status(HttpStatus.OK).json({
       message: "l’adresse a été récupéré avec succès ",

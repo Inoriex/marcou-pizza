@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as MongooseSchema } from "mongoose";
 import { Transform, Type } from "class-transformer";
-import { User } from "@user/schema/user.schema";
+import { User } from "@user/schemas/user.schema";
 
 export type AddressDocument = Address & Document;
 
