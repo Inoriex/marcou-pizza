@@ -12,8 +12,8 @@ export class Ticket extends Document {
 
   /*  @Prop({ type: String, required: true, enum: Object.values(ticketEnum) })
   ticket: ticketEnum; */
-  @Prop()
-  num: string;
+  /* @Prop()
+  num: string; */
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Order" })
   @Type(() => Order)
