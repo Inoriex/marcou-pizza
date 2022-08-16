@@ -16,6 +16,9 @@ export class RestaurantDTO {
   tel: string;
 
   @IsString()
+  horaires: string;
+
+  @IsString()
   description?: string;
 
   address: CreateAddressDto;
@@ -36,6 +39,9 @@ export class CreateRestaurantDTO {
 
   @IsString()
   description?: string;
+
+  @IsString()
+  horaires: string;
 
   address: string;
 }

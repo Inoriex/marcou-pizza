@@ -8,6 +8,9 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "rimraf": "./node_modules/rimraf/bin.js",
+    "clean": "rimraf js/",
+    "compile": "npm run clean && tsc -p ./",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

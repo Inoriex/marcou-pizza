@@ -20,7 +20,8 @@
     "resolveJsonModule": true,
     "paths": {
       "@/*": ["src/*"],
-      "@pizza/*": ["src/pizza/*"],
+      "@product/*": ["src/product/*"],
+      "@category/*": ["src/category/*"],
       "@user/*": ["src/user/*"],
       "@auth/*": ["src/auth/*"],
       "@config/*": ["src/config/*"],
@@ -31,6 +32,7 @@
       "@mail/*": ["src/mail/*"],
       "@order/*": ["src/order/*"],
       "@ticket/*": ["src/ticket/*"],
+      "@ingredient/*": ["src/product/ingredient/*"],
     }
   }
 }

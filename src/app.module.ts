@@ -9,7 +9,7 @@ import { LoggerModule } from "@logger/logger.module";
 
 import { UserModule } from "@user/user.module";
 import { AuthModule } from "@auth/auth.module";
-import { PizzaModule } from "@pizza/pizza.module";
+import { ProductModule } from "@product/product.module";
 import { MailModule } from "@mail/mail.module";
 import { RestaurantModule } from "@restaurant/restaurant.module";
 import { OrderModule } from "@order/order.module";
@@ -21,7 +21,7 @@ import { OrderModule } from "@order/order.module";
     UserModule,
     AuthModule,
     configModule,
-    PizzaModule,
+    ProductModule,
     RestaurantModule,
     MailModule,
     OrderModule,
