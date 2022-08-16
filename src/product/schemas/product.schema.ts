@@ -26,7 +26,9 @@ export class Product extends Document {
   @Prop()
   price_G?: number;
   @Prop()
-  description?: number;
+  price?: string;
+  @Prop()
+  description?: string;
   @Prop({ default: true })
   dispo: boolean;
 
