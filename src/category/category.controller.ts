@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, 
 import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
 import { CategoryDTO } from "./dto/category.dto";
-import { ValidateObjectId } from "@pizza/pipe/id.pipe";
+import { ValidateObjectId } from "@product/pipe/id.pipe";
 import { CategoryService } from "./category.service";
 import { RolesGuard } from "@auth/guards/roles.guard";
 import { Roles } from "@auth/decorators/roles.decorator";

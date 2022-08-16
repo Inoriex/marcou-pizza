@@ -13,7 +13,7 @@ export class Order extends Document {
 
   @Prop()
   articles: {
-    articleId: { type: MongooseSchema.Types.ObjectId; ref: "Pizza" };
+    articleId: { type: MongooseSchema.Types.ObjectId; ref: "Product" };
     quantity: number;
     taille: { type: string; enum: pizzaSize };
     totalArticlePrice: number;

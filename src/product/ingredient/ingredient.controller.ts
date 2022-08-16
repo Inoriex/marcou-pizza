@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Res, UseGuards } from "@nestjs/common";
 import { ApiOkResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
-import { IngredientDTO } from "@pizza/ingredient/dto/ingredient.dto";
-import { IngredientService } from "@pizza/ingredient/ingredient.service";
-import { ValidateObjectId } from "@pizza/pipe/id.pipe";
+import { IngredientDTO } from "@product/ingredient/dto/ingredient.dto";
+import { IngredientService } from "@product/ingredient/ingredient.service";
+import { ValidateObjectId } from "@product/pipe/id.pipe";
 import { RolesGuard } from "@auth/guards/roles.guard";
 
 //localhost:3000/api/ingredient/

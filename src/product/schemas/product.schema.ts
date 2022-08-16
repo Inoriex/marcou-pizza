@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { Document, ObjectId, Types, Schema as MongooseSchema } from "mongoose";
 import { Transform, Type } from "class-transformer";
-import { Category } from "@pizza/category/schemas/category.schema";
-import { Ingredient } from "@pizza/ingredient/schemas/ingredient.schema";
+import { Ingredient } from "@product/ingredient/schemas/ingredient.schema";
+import { categoryEnum } from "@category/enums/category.enum";
+import { productEnum } from "@category/enums/product-type.enum";
 
-export type PizzaDocument = Pizza & mongoose.Document;
+export type ProductDocument = Product & mongoose.Document;
 
 @Schema({
   timestamps: true,
@@ -13,7 +14,7 @@ export type PizzaDocument = Pizza & mongoose.Document;
     virtuals: true,
   },
 })
-export class Pizza extends Document {
+export class Product extends Document {
   @Transform(({ value }) => value.toString())
   _id: string;
   @Prop()
@@ -21,21 +22,24 @@ export class Pizza extends Document {
   @Prop()
   image?: string;
   @Prop()
-  price_P: number;
+  price_P?: number;
   @Prop()
-  price_G: number;
+  price_G?: number;
   @Prop()
   description?: number;
   @Prop({ default: true })
   dispo: boolean;
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Category" })
-  @Type(() => Category)
-  category: Category;
+
+  @Prop({ type: String, enum: Object.values(categoryEnum) })
+  category: categoryEnum;
+
+  @Prop({ type: String, enum: Object.values(productEnum) })
+  productType: productEnum;
   @Prop({
     type: [{ type: MongooseSchema.Types.ObjectId, ref: "Ingredient" }],
   })
   @Type(() => Ingredient)
-  ingredients: Ingredient[];
+  ingredients?: Ingredient[];
 }
 
-export const PizzaSchema = SchemaFactory.createForClass(Pizza);
+export const ProductSchema = SchemaFactory.createForClass(Product);

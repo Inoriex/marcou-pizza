@@ -9,7 +9,7 @@ import { UserService } from "@user/user.service";
 import { RolesGuard } from "@auth/guards/roles.guard";
 import { Roles } from "@auth/decorators/roles.decorator";
 
-// Localhost:3000/pizzas/
+// Localhost:3000/products/
 @ApiTags("api/restaurant")
 @Controller("api/restaurant")
 @UseGuards(RolesGuard)
@@ -17,7 +17,7 @@ export class RestaurantController {
   constructor(private restaurantService: RestaurantService, private readonly userService: UserService) {}
 
   // middleware qui verifie le webtoken, session toujours valideF
-  //localhost:3000/pizzas/list
+  //localhost:3000/products/list
   @Get()
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "Récupération de l'address OK 👌 " })

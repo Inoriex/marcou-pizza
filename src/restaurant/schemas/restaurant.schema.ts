@@ -21,6 +21,9 @@ export class Restaurant extends Document {
   @Prop()
   tel: string;
 
+  @Prop()
+  horaires: string;
+
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Address" })
   @Type(() => Address)
   address: Address;
