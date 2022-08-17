@@ -94,7 +94,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ description: "Login User" })
   @ApiOkResponse({})
-  async login(@Req() req: Request, @Body() loginUserDto: LoginUserDto) {
+  async login(@Req() req, @Body() loginUserDto: LoginUserDto) {
     console.log(loginUserDto);
     return await this.userService.login(req, loginUserDto);
   }
@@ -111,7 +111,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ description: "Forgot password" })
   @ApiOkResponse({})
-  async forgotPassword(@Req() req: Request, @Body() createForgotPasswordDto: CreateForgotPasswordDto) {
+  async forgotPassword(@Req() req, @Body() createForgotPasswordDto: CreateForgotPasswordDto) {
     return await this.userService.forgotPassword(req, createForgotPasswordDto);
   }
 
@@ -119,7 +119,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ description: "Verfiy forget password code" })
   @ApiOkResponse({})
-  async forgotPasswordVerify(@Req() req: Request, @Body() verifyUuidDto: VerifyUuidDto) {
+  async forgotPasswordVerify(@Req() req, @Body() verifyUuidDto: VerifyUuidDto) {
     return await this.userService.forgotPasswordVerify(req, verifyUuidDto);
   }
 
