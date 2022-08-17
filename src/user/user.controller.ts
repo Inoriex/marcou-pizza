@@ -86,7 +86,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ description: "Verify Email" })
   @ApiOkResponse({})
-  async verifyEmail(@Req() req: Request, @Body() verifyUuidDto: VerifyUuidDto) {
+  async verifyEmail(@Req() req, @Body() verifyUuidDto: VerifyUuidDto) {
     return await this.userService.verifyEmail(req, verifyUuidDto);
   }
 
