@@ -9,15 +9,6 @@ export class IngredientDTO {
   name: string;
 
   @IsArray()
-  @IsEnum(productEnum, { each: true })
-  @ApiPropertyOptional({
-    description: "List of enums",
-    isArray: true,
-    enum: productEnum,
-  })
-  productType: productEnum[];
-
-  @IsArray()
   @IsEnum(ingredientEnum)
   @ApiPropertyOptional({
     description: "Category of ingredient",

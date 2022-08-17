@@ -14,9 +14,6 @@ export class Ingredient {
   @Prop({ unique: true })
   name: string;
 
-  @Prop({ type: [String], enum: Object.values(productEnum) })
-  productType: [productEnum];
-
   @Prop({ type: String, enum: Object.values(ingredientEnum) })
   category: ingredientEnum;
 }

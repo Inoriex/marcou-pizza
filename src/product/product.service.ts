@@ -29,7 +29,7 @@ export class ProductService {
     return await this.productModel.find({ category: "Boisson" }).exec();
   }
   async getAllSupplements(): Promise<Product[]> {
-    return await this.productModel.find({ category: "Supplément" }).exec();
+    return await this.productModel.find({ category: "Supplément" }).populate("ingredients").exec();
   }
 
   async getProduct(productId: string): Promise<Product> {

@@ -1,0 +1,375 @@
+[{ "_id": "62fb80a7421d389a64e9f094", "name": "fromage" },
+{ "_id": "62fb80c2421d389a64e9f098", "name": "crème fraîche" },
+{ "_id": "62fb80ce421d389a64e9f09c", "name": "chèvre" },
+{ "_id": "62fb811762f4a3908b4e8499", "name": "miel" },
+{ "_id": "62fb815d62f4a3908b4e849d", "name": "roquefort" },
+{ "_id": "62fb817662f4a3908b4e84a1", "name": "cantal" },
+{ "_id": "62fb818162f4a3908b4e84a5", "name": "bleu" },
+{ "_id": "62fb81a162f4a3908b4e84a9", "name": "camembert" },
+{ "_id": "62fb8253741c98869290f3dd", "name": "reblochon" },
+{ "_id": "62fb82885de8899d7e43817b", "name": "tomate" },
+{ "_id": "62fb829f5de8899d7e43817f", "name": "champignons" },
+{ "_id": "62fb82c75de8899d7e438183", "name": "poivrons" },
+{ "_id": "62fb82d65de8899d7e438187", "name": "oignons" },
+{ "_id": "62fb82f05de8899d7e43818b", "name": "artichauts" },
+{ "_id": "62fb83245de8899d7e43818f", "name": "échalotte" },
+{ "_id": "62fb832a5de8899d7e438193", "name": "ail" },
+{ "_id": "62fb83305de8899d7e438197", "name": "persil" },
+{ "_id": "62fb83405de8899d7e43819b", "name": "galette de pomme de terre" },
+{ "_id": "62fb83c95de8899d7e43819f", "name": "huile d\"olive" },
+{ "_id": "62fb83ee5de8899d7e4381a5", "name": "anchois" },
+{ "_id": "62fb83fe5de8899d7e4381a9", "name": "jambon" },
+{ "_id": "62fb840a5de8899d7e4381ad", "name": "oeuf" },
+{ "_id": "62fb84185de8899d7e4381b1", "name": "chorizo" },
+{ "_id": "62fb842d5de8899d7e4381b5", "name": "steak haché" },
+{ "_id": "62fb84525de8899d7e4381b9", "name": "magret frais" },
+{ "_id": "62fb84625de8899d7e4381bd", "name": "lardons" },
+{ "_id": "62fb84765de8899d7e4381c1", "name": "poulet" },
+{ "_id": "62fb84835de8899d7e4381c5", "name": "kébab" },
+{ "_id": "62fb84b15de8899d7e4381c9", "name": "curry" },
+{ "_id": "62fb84be5de8899d7e4381cd", "name": "cumin" },
+{ "_id": "62fbc0558c36462a49042057", "name": "cheddar" }]
+
+
+// db.products.update({ "name" : "Champignons" }, { $set: { "ingredients" : ["62fb829f5de8899d7e43817f"] } }
+// db.products.update({ "name" : "Oignons" }, { $set: { "ingredients" : ["62fb82d65de8899d7e438187"] } }
+// db.products.update({ "name" : "Miel" }, { $set: { "ingredients" : ["62fb811762f4a3908b4e8499"] } }
+// db.products.update({ "name" : "Poivrons" }, { $set: { "ingredients" : ["62fb82c75de8899d7e438183"] } }
+// db.products.update({ "name" : "Bleu" }, { $set: { "ingredients" : ["62fb818162f4a3908b4e84a5"] } }
+// db.products.update({ "name" : "Chorizo" }, { $set: { "ingredients" : ["62fb84185de8899d7e4381b1"] } }
+// db.products.update({ "name" : "Galette pomme de terre" }, { $set: { "ingredients" : ["62fb83405de8899d7e43819b"] } }
+// db.products.update({ "name" : "Lardon" }, { $set: { "ingredients" : ["62fb84625de8899d7e4381bd"] } }
+// db.products.update({ "name" : "Cantal" }, { $set: { "ingredients" : ["62fb817662f4a3908b4e84a1"] } }
+// db.products.update({ "name" : "Chèvre" }, { $set: { "ingredients" : ["62fb80ce421d389a64e9f09c"] } }
+// db.products.update({ "name" : "Jambon" }, { $set: { "ingredients" : ["62fb83fe5de8899d7e4381a9"] } }
+// db.products.update({ "name" : "Anchois" }, { $set: { "ingredients" : ["62fb83ee5de8899d7e4381a5"] } }
+// db.products.update({ "name" : "Artichaut" }, { $set: { "ingredients" : ["62fb82f05de8899d7e43818b"] } }
+// db.products.update({ "name" : "Roquefort" }, { $set: { "ingredients" : ["62fb815d62f4a3908b4e849d"] } }
+// db.products.update({ "name" : "Steak haché" }, { $set: { "ingredients" : ["62fb842d5de8899d7e4381b5"] } }
+// db.products.update({ "name" : "Cheddar" }, { $set: { "ingredients" : ["62fbc0558c36462a49042057"] } }
+// db.products.update({ "name" : "Changement de Base" }, { $set: { "ingredients" : ["62fb80c2421d389a64e9f098","62fb82885de8899d7e43817b"] } }
+
+{
+  "name": "Margarita",
+  "category": "Pizza",
+  "price_P": "8.40",
+  "price_G": "9.70",
+  "ingredients": [
+    "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d"
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Niçoise",
+  "category": "Pizza",
+  "price_P": "9.60",
+  "price_G": "10.90",
+  "ingredients": [
+    "62fbb78e8c36462a49041f8d",
+    "62fbb7aa8c36462a49041fb1",
+    "62fbb7ca8c36462a49041fd5"
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Jambon",
+  "category": "Pizza",
+  "price_P": "10.80",
+  "price_G": "12.10",
+  "ingredients": [
+    "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7ad8c36462a49041fb5"
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Reine",
+  "category": "Pizza",
+  "price_P": "11.20",
+  "price_G": "12.50",
+  "ingredients": [
+    "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7918c36462a49041f91",
+    "62fbb7ad8c36462a49041fb5"
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Silicienne",
+  "category": "Pizza",
+  "price_P": "11.40",
+  "price_G": "12.70",
+  "ingredients": [
+    "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7aa8c36462a49041fb1"
+
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Royale",
+  "category": "Pizza",
+  "price_P": "11.70",
+  "price_G": "13.00",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7918c36462a49041f91",
+    "62fbb7ad8c36462a49041fb5",
+    "62fbb7b08c36462a49041fb9"
+
+
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Calzone",
+  "category": "Pizza",
+  "price_P": "11.70",
+  "price_G": "13.00",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7918c36462a49041f91",
+    "62fbb7ad8c36462a49041fb5",
+    "62fbb7b08c36462a49041fb9",
+    "62fbb7768c36462a49041f71"
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Chorizo",
+  "category": "Pizza",
+  "price_P": "11.70",
+  "price_G": "13.00",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7b38c36462a49041fbd",
+    "62fbb7948c36462a49041f95"
+
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Paysanne",
+  "category": "Pizza",
+  "price_P": "11.70",
+  "price_G": "13.00",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7918c36462a49041f91",
+    "62fbb7978c36462a49041f99",
+    "62fbb7bc8c36462a49041fc9",
+    "62fbb7768c36462a49041f71"
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Chèvre/Miel",
+  "category": "Pizza",
+  "price_P": "12.40",
+  "price_G": "13.70",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb77a8c36462a49041f75",
+    "62fbb7cd8c36462a49041fd9"
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Roquefort",
+  "category": "Pizza",
+  "price_P": "12.40",
+  "price_G": "13.70",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb77d8c36462a49041f79"  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Végétarienne",
+  "category": "Pizza",
+  "price_P": "12.40",
+  "price_G": "13.70",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7978c36462a49041f99",
+    "62fbb7918c36462a49041f91",
+    "62fbb7948c36462a49041f95",
+    "62fbb79a8c36462a49041f9d"
+
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Cannibale",
+  "category": "Pizza",
+  "price_P": "12.60",
+  "price_G": "13.90",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7978c36462a49041f99",
+    "62fbb7b68c36462a49041fc1",
+    "62fbb7948c36462a49041f95"
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "4 Fromages",
+  "category": "Pizza",
+  "price_P": "12.60",
+  "price_G": "13.90",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb77a8c36462a49041f75",
+    "62fbb7808c36462a49041f7d",
+    "62fbb7838c36462a49041f81"
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "4 saisons",
+  "category": "Pizza",
+  "price_P": "13.10",
+  "price_G": "14.40",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7838c36462a49041f81",
+    "62fbb7918c36462a49041f91",
+    "62fbb7948c36462a49041f95",
+    "62fbb79a8c36462a49041f9d"
+  ],
+  "productType": "Base tomate"
+}
+{
+  "name": "Magret",
+  "category": "Pizza",
+  "price_P": "15.20",
+  "price_G": "16.50",
+  "ingredients": [
+   "62fbb78e8c36462a49041f8d",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7ba8c36462a49041fc5"
+  ],
+  "productType": "Base tomate"
+}
+
+{
+  "name": "Camembert",
+  "category": "Pizza",
+  "price_P": "13.20",
+  "price_G": "14.50",
+  "ingredients": [
+   "62fbb7768c36462a49041f71",
+    "62fbb7978c36462a49041f99",
+    "62fbb7728c36462a49041f6d",
+    "62fbb7878c36462a49041f85",
+    "62fbb7bc8c36462a49041fc9"
+  ],
+  "productType": "Base crème"
+}
+{
+  "name": "Poulet Curry",
+  "category": "Pizza",
+  "price_P": "13.60",
+  "price_G": "14.90",
+  "ingredients": [
+   "62fbb7768c36462a49041f71",
+   "62fbb7728c36462a49041f6d",
+    "62fbb7978c36462a49041f99",
+    "62fbb7bf8c36462a49041fcd",
+    "62fbb7d18c36462a49041fdd",
+    "62fbb78e8c36462a49041f8d"
+  ],
+  "productType": "Base crème"
+}
+{
+  "name": "Kebab",
+  "category": "Pizza",
+  "price_P": "13.60",
+  "price_G": "14.90",
+  "ingredients": [
+   "62fbb7768c36462a49041f71",
+   "62fbb7728c36462a49041f6d",
+    "62fbb7978c36462a49041f99",
+    "62fbb7c28c36462a49041fd1",
+    "62fbb7d58c36462a49041fe1",
+    "62fbb79d8c36462a49041fa1",
+    "62fbb7a18c36462a49041fa5",
+    "62fbb7a38c36462a49041fa9"
+  ],
+  "productType": "Base crème"
+}
+{
+  "name": "Savoyarde",
+  "category": "Pizza",
+  "price_P": "15.20",
+  "price_G": "16.50",
+  "ingredients": [
+   "62fbb7768c36462a49041f71",
+    "62fbb7978c36462a49041f99",
+    "62fbb7a78c36462a49041fad",
+    "62fbb78a8c36462a49041f89",
+    "62fbb7bc8c36462a49041fc9"
+  ],
+  "productType": "Base crème"
+}
+{
+  "name": "Canard Chèvre/Miel",
+  "category": "Pizza",
+  "price_P": "16.20",
+  "price_G": "17.50",
+  "ingredients": [
+   "62fbb7768c36462a49041f71",
+    "62fbb7978c36462a49041f99",
+    "62fbb77a8c36462a49041f75",
+    "62fbb7cd8c36462a49041fd9",
+    "62fbb7ba8c36462a49041fc5"
+  ],
+  "productType": "Base crème"
+}
+
+
+
+{ "category": "Fromage", "name": "fromage" }
+{ "category": "Fromage", "name": "crème fraîche" }
+{ "category": "Fromage", "name": "chèvre" }
+{ "category": "Fromage", "name": "roquefort" }
+{ "category": "Fromage", "name": "cantal" }
+{ "category": "Fromage", "name": "bleu" }
+{ "category": "Fromage", "name": "camembert" }
+{ "category": "Fromage", "name": "reblochon" }
+{ "category": "Légume", "name": "tomate" }
+{ "category": "Légume", "name": "champignons" }
+{ "category": "Légume", "name": "poivrons" }
+{ "category": "Légume", "name": "oignons" }
+{ "category": "Légume", "name": "artichauts" }
+{ "category": "Légume", "name": "échalotte" }
+{ "category": "Légume", "name": "ail" }
+{ "category": "Légume", "name": "persil" }
+{ "category": "Légume", "name": "galette de pomme de terre" }
+{ "category": "Viande", "name": "anchois" }
+{ "category": "Viande", "name": "jambon" }
+{ "category": "Viande", "name": "oeuf" }
+{ "category": "Viande", "name": "chorizo" }
+{ "category": "Viande", "name": "steak haché" }
+{ "category": "Viande", "name": "magret frais" }
+{ "category": "Viande", "name": "lardons" }
+{ "category": "Viande", "name": "poulet" }
+{ "category": "Viande", "name": "kébab" }
+{ "category": "Sauce", "name": "huile d\"olive" }
+{ "category": "Sauce", "name": "miel" }
+{ "category": "Epice", "name": "curry" }
+{ "category": "Epice", "name": "cumin" }
