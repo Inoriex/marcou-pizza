@@ -1,3 +1,28 @@
+/// <reference types="mongoose/types/aggregate" />
+/// <reference types="mongoose/types/callback" />
+/// <reference types="mongoose/types/collection" />
+/// <reference types="mongoose/types/connection" />
+/// <reference types="mongoose/types/cursor" />
+/// <reference types="mongoose/types/document" />
+/// <reference types="mongoose/types/error" />
+/// <reference types="mongoose/types/expressions" />
+/// <reference types="mongoose/types/helpers" />
+/// <reference types="mongoose/types/middlewares" />
+/// <reference types="mongoose/types/indexes" />
+/// <reference types="mongoose/types/models" />
+/// <reference types="mongoose/types/mongooseoptions" />
+/// <reference types="mongoose/types/pipelinestage" />
+/// <reference types="mongoose/types/populate" />
+/// <reference types="mongoose/types/query" />
+/// <reference types="mongoose/types/schemaoptions" />
+/// <reference types="mongoose/types/schematypes" />
+/// <reference types="mongoose/types/session" />
+/// <reference types="mongoose/types/types" />
+/// <reference types="mongoose/types/utility" />
+/// <reference types="mongoose/types/validation" />
+/// <reference types="mongoose/types/virtuals" />
+/// <reference types="mongoose" />
+/// <reference types="mongoose/types/inferschematype" />
 import { UserService } from "@user/user.service";
 import { CreateAddressDto } from "@user/dto/create-address.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
@@ -22,21 +47,21 @@ export declare class UserController {
         _id: import("mongoose").Types.ObjectId;
     })>;
     register(user: User, createUserDto: CreateUserDto): Promise<User>;
-    verifyEmail(req: any, verifyUuidDto: VerifyUuidDto): Promise<{
+    verifyEmail(req: Request, verifyUuidDto: VerifyUuidDto): Promise<{
         fullName: string;
         email: string;
         accessToken: string;
         refreshToken: string;
     }>;
-    login(req: any, loginUserDto: LoginUserDto): Promise<any>;
+    login(req: Request, loginUserDto: LoginUserDto): Promise<any>;
     refreshAccessToken(refreshAccessTokenDto: RefreshAccessTokenDto): Promise<{
         accessToken: string;
     }>;
-    forgotPassword(req: any, createForgotPasswordDto: CreateForgotPasswordDto): Promise<{
+    forgotPassword(req: Request, createForgotPasswordDto: CreateForgotPasswordDto): Promise<{
         email: string;
         message: string;
     }>;
-    forgotPasswordVerify(req: any, verifyUuidDto: VerifyUuidDto): Promise<{
+    forgotPasswordVerify(req: Request, verifyUuidDto: VerifyUuidDto): Promise<{
         email: string;
         message: string;
     }>;
