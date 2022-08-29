@@ -10,7 +10,7 @@ export class Address {
   @Transform(({ value }) => value.toString())
   _id: string;
 
-  @Prop()
+  @Prop({default: 'Addresse 1'})
   name: string;
 
   @Prop()
