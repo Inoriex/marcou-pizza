@@ -173,7 +173,7 @@ __decorate([
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Request, verify_uuid_dto_1.VerifyUuidDto]),
+    __metadata("design:paramtypes", [Object, verify_uuid_dto_1.VerifyUuidDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "verifyEmail", null);
 __decorate([
@@ -184,7 +184,7 @@ __decorate([
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Request, login_user_dto_1.LoginUserDto]),
+    __metadata("design:paramtypes", [Object, login_user_dto_1.LoginUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "login", null);
 __decorate([
@@ -205,7 +205,7 @@ __decorate([
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Request, create_forgot_password_dto_1.CreateForgotPasswordDto]),
+    __metadata("design:paramtypes", [Object, create_forgot_password_dto_1.CreateForgotPasswordDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "forgotPassword", null);
 __decorate([
@@ -216,7 +216,7 @@ __decorate([
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Request, verify_uuid_dto_1.VerifyUuidDto]),
+    __metadata("design:paramtypes", [Object, verify_uuid_dto_1.VerifyUuidDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "forgotPasswordVerify", null);
 __decorate([

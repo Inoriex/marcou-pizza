@@ -32,7 +32,7 @@ __decorate([
     __metadata("design:returntype", String)
 ], AppController.prototype, "getApp", null);
 AppController = __decorate([
-    (0, common_1.Controller)("/api/v1")
+    (0, common_1.Controller)()
 ], AppController);
 exports.AppController = AppController;
 //# sourceMappingURL=app.controller.js.map
