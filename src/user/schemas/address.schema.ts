@@ -19,7 +19,7 @@ export class Address {
   @Prop()
   cp: string;
 
-  @Prop()
+  @Prop({default: 'France'})
   country: string;
 
   @Prop()
