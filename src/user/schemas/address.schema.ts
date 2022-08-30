@@ -17,7 +17,7 @@ export class Address {
   city: string;
 
   @Prop()
-  cp: string;
+  zip: string;
 
   @Prop({default: 'France'})
   country: string;
