@@ -75,7 +75,7 @@ export class User {
   @Prop({
     type: [{ address: { type: MongooseSchema.Types.ObjectId, ref: "Address" } }],
   })
-  addresses: { address: Address }[];
+  addresses?: { address: Address }[];
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
