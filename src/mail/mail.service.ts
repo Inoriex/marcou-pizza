@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { MailerService } from "@nestjs-modules/mailer";
 import { CreateUserDto } from "@user/dto/create-user.dto";
 import { IReadableUser } from "@user/interfaces/readable-user.interface";
+import { User } from '@user/interfaces/user.interface';
 
 @Injectable()
 export class MailService {
@@ -11,18 +12,18 @@ export class MailService {
     this.clientAppUrl = process.env.CLIENT_APP_URL;
   }
 
-  async sendUserConfirmation(user: CreateUserDto, token: string) {
-    const url = `example.com/auth/confirm?token=${token}`;
-
+  async sendUserConfirmation(user: User ) {
+    const url = `${this.clientAppUrl}user/verify-email?=${user.verification}`;
     await this.mailerService.sendMail({
       to: user.email,
       subject: "Bienvenue sur Marcau Pizza ! Confirmez votre adresse email",
       template: "/confirmation",
       context: {
-        name: `${user.firstName} ${user.lastName}`,
+        name: `${user.fullName}`,
         url,
       },
     });
+    return "success";
   }
   async forgotPassword(user: IReadableUser, token: string): Promise<void> {
     const url = `${this.clientAppUrl}/auth/forgotPassword?token=${token}`;

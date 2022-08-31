@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards, Req, Query } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOkResponse, ApiTags, ApiBearerAuth, ApiHeader, ApiOperation, ApiInternalServerErrorResponse, ApiBadRequestResponse } from "@nestjs/swagger";
 import { AuthGuard, PassportModule } from "@nestjs/passport";
 import { UserService } from "@user/user.service";
@@ -85,8 +85,8 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ description: "Verify Email" })
   @ApiOkResponse({})
-  async verifyEmail(@Req() req, @Body() verifyUuidDto: VerifyUuidDto) {
-    return await this.userService.verifyEmail(req, verifyUuidDto);
+  async verifyEmail(@Req() req, @Query() query: { verification: string } )  {
+    return await this.userService.verifyEmail(req, query.verification);
   }
 
   @Post("login")

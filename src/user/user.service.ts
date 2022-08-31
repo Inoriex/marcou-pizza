@@ -16,6 +16,7 @@ import { CreateForgotPasswordDto } from "@user/dto/create-forgot-password.dto";
 import { VerifyUuidDto } from "@user/dto/verify-uuid.dto";
 import { RefreshAccessTokenDto } from "@user/dto/refresh-access-token.dto";
 import { ForgotPassword } from "@user/interfaces/forgot-password.interface";
+import { MailService } from "@/mail/mail.service";
 
 @Injectable()
 export class UserService {
@@ -28,6 +29,7 @@ export class UserService {
     @InjectModel("ForgotPassword") private readonly forgotPasswordModel: Model<ForgotPassword>,
     @InjectModel("Address") private readonly addressModel: Model<Address>,
     private readonly authService: AuthService,
+    private readonly mailService: MailService,
   ) {}
 
   // ┌─┐┬─┐┌─┐┌─┐┌┬┐┌─┐  ┬ ┬┌─┐┌─┐┬─┐
@@ -39,14 +41,15 @@ export class UserService {
     await this.isEmailUnique(user.email);
     this.setRegistrationInfo(user);
     await user.save();
+    this.mailService.sendUserConfirmation(user);
     return this.buildRegistrationInfo(user);
   }
 
   // ┬  ┬┌─┐┬─┐┬┌─┐┬ ┬  ┌─┐┌┬┐┌─┐┬┬
   // └┐┌┘├┤ ├┬┘│├┤ └┬┘  ├┤ │││├─┤││
   //  └┘ └─┘┴└─┴└   ┴   └─┘┴ ┴┴ ┴┴┴─┘
-  async verifyEmail(@Req() req, verifyUuidDto: VerifyUuidDto) {
-    const user = await this.findByVerification(verifyUuidDto.verification);
+  async verifyEmail(@Req() req, verifyUuidDto: string) {
+    const user = await this.findByVerification(verifyUuidDto);
     await this.setUserAsVerified(user);
     return {
       fullName: user.fullName,
