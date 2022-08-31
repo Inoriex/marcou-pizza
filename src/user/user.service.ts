@@ -90,6 +90,7 @@ export class UserService {
         email: user.email,
         accessToken: await this.authService.createAccessToken(user._id),
         refreshToken: await this.authService.createRefreshToken(req, user._id),
+        roles: user.roles,
       };
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -234,7 +235,7 @@ export class UserService {
     try {
       const user = await this.userModel.findOne({ email, verified: true });
       if (!user) {
-        throw new NotFoundException("Wrong email or password.");
+        throw new NotFoundException("Mauvais email ou mot de passe");
       }
       return user;
     } catch (error) {
@@ -247,7 +248,7 @@ export class UserService {
       const match = await bcrypt.compare(attemptPass, user.password);
       if (!match) {
         await this.passwordsDoNotMatch(user);
-        throw new NotFoundException("Wrong email or password.");
+        throw new NotFoundException("Mauvais email ou mot de passe");
       }
       return match;
     } catch (error) {
