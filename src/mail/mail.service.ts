@@ -7,14 +7,16 @@ import { User } from "@user/interfaces/user.interface";
 @Injectable()
 export class MailService {
   private readonly clientAppUrl: string;
+  private readonly apiUrl: string;
 
   constructor(private mailerService: MailerService) {
-    this.clientAppUrl = process.env.CLIENT_APP_URL;
+    this.clientAppUrl = process.env.API_URL;
+    this.apiUrl = process.env.CLIENT_APP_URL;
   }
 
   async sendUserConfirmation(user: User) {
     try {
-      const url = `${this.clientAppUrl}user/verify-email?verification=${user.verification}`;
+      const url = `${this.apiUrl}user/verify-email?verification=${user.verification}`;
       await this.mailerService.sendMail({
         to: user.email,
         subject: "Bienvenue sur Marcau Pizza ! Confirmez votre adresse email",

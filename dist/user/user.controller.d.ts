@@ -18,9 +18,9 @@ export declare class UserController {
         _id: import("mongoose").Types.ObjectId;
     }>;
     UpdateUserAddress(user: User, address: Partial<CreateAddressDto>, addressId: string): Promise<import("./schemas/address.schema").Address>;
-    DeleteUserAddress(user: User, addressId: string): Promise<import("mongodb").UpdateResult | (User & {
+    DeleteUserAddress(user: User, addressId: string): Promise<User & {
         _id: import("mongoose").Types.ObjectId;
-    })>;
+    }>;
     register(createUserDto: CreateUserDto): Promise<User>;
     verifyEmail(req: any, query: {
         verification: string;

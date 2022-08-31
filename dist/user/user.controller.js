@@ -44,49 +44,117 @@ let UserController = class UserController {
         this.userService = userService;
     }
     me(request) {
-        const userId = request.user.id;
-        return this.userService.find(userId);
+        try {
+            const userId = request.user.id;
+            return this.userService.find(userId);
+        }
+        catch (error) {
+            throw error;
+        }
     }
     getUserAddresses(user) {
-        const userId = user.id;
-        console.log(userId);
-        return this.userService.getUserAddresses(userId);
+        try {
+            const userId = user.id;
+            console.log(userId);
+            return this.userService.getUserAddresses(userId);
+        }
+        catch (error) {
+            throw error;
+        }
     }
     CreateUserAddress(req, user, address) {
-        const userId = user.id;
-        return this.userService.addAddress(address, userId);
+        try {
+            const userId = user.id;
+            return this.userService.addAddress(address, userId);
+        }
+        catch (error) {
+            console.log(error);
+            throw new Error("unable to create user address");
+        }
     }
     UpdateUserAddress(user, address, addressId) {
-        const userId = user.id;
-        return this.userService.updateAddress(addressId, address, userId);
+        try {
+            const userId = user.id;
+            return this.userService.updateAddress(addressId, address, userId);
+        }
+        catch (error) {
+            throw error;
+        }
     }
     DeleteUserAddress(user, addressId) {
-        const userId = user.id;
-        return this.userService.deleteAddress(addressId, userId);
+        try {
+            const userId = user.id;
+            return this.userService.deleteAddress(addressId, userId);
+        }
+        catch (error) {
+            throw error;
+        }
     }
     async register(createUserDto) {
-        const address = await this.userService.createAddress(createUserDto.address);
-        const { address: _ } = createUserDto, createUser = __rest(createUserDto, ["address"]);
-        return await this.userService.create(Object.assign(Object.assign({}, createUser), { addresses: [address._id] }));
+        try {
+            const address = await this.userService.createAddress(createUserDto.address);
+            const { address: _ } = createUserDto, createUser = __rest(createUserDto, ["address"]);
+            return await this.userService.create(Object.assign(Object.assign({}, createUser), { addresses: [address._id] }));
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
     async verifyEmail(req, query) {
-        return await this.userService.verifyEmail(req, query.verification);
+        try {
+            return await this.userService.verifyEmail(req, query.verification);
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
     async login(req, loginUserDto) {
-        console.log(loginUserDto);
-        return await this.userService.login(req, loginUserDto);
+        try {
+            console.log(loginUserDto);
+            return await this.userService.login(req, loginUserDto);
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
     async refreshAccessToken(refreshAccessTokenDto) {
-        return await this.userService.refreshAccessToken(refreshAccessTokenDto);
+        try {
+            return await this.userService.refreshAccessToken(refreshAccessTokenDto);
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
     async forgotPassword(req, createForgotPasswordDto) {
-        return await this.userService.forgotPassword(req, createForgotPasswordDto);
+        try {
+            return await this.userService.forgotPassword(req, createForgotPasswordDto);
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
     async forgotPasswordVerify(req, verifyUuidDto) {
-        return await this.userService.forgotPasswordVerify(req, verifyUuidDto);
+        try {
+            return await this.userService.forgotPasswordVerify(req, verifyUuidDto);
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
     async resetPassword(resetPasswordDto) {
-        return await this.userService.resetPassword(resetPasswordDto);
+        try {
+            return await this.userService.resetPassword(resetPasswordDto);
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
     findAll() {
         return this.userService.findAll();

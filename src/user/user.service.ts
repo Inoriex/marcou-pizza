@@ -56,12 +56,13 @@ export class UserService {
     try {
       const user = await this.findByVerification(verifyUuidDto);
       await this.setUserAsVerified(user);
-      return {
+      const token = {
         fullName: user.fullName,
         email: user.email,
         accessToken: await this.authService.createAccessToken(user._id),
         refreshToken: await this.authService.createRefreshToken(req, user._id),
       };
+      window.location.replace(process.env.CLIENT_APP_URL +'account');
     } catch (error) {
       throw new BadRequestException(error.message);
     }

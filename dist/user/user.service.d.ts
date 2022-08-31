@@ -75,7 +75,7 @@ export declare class UserService {
         _id: import("mongoose").Types.ObjectId;
     }>;
     updateAddress(addressId: string, payload: Partial<CreateAddressDto>, userId: string): Promise<Address>;
-    deleteAddress(addressId: string, userId: string): Promise<import("mongodb").UpdateResult | (User & {
+    deleteAddress(addressId: string, userId: string): Promise<User & {
         _id: import("mongoose").Types.ObjectId;
-    })>;
+    }>;
 }

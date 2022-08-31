@@ -18,17 +18,22 @@ let MailService = class MailService {
         this.clientAppUrl = process.env.CLIENT_APP_URL;
     }
     async sendUserConfirmation(user) {
-        const url = `${this.clientAppUrl}user/verify-email?verification=${user.verification}`;
-        await this.mailerService.sendMail({
-            to: user.email,
-            subject: "Bienvenue sur Marcau Pizza ! Confirmez votre adresse email",
-            template: "confirmation",
-            context: {
-                name: `${user.fullName}`,
-                url,
-            },
-        });
-        return "success";
+        try {
+            const url = `${this.clientAppUrl}user/verify-email?verification=${user.verification}`;
+            await this.mailerService.sendMail({
+                to: user.email,
+                subject: "Bienvenue sur Marcau Pizza ! Confirmez votre adresse email",
+                template: "confirmation",
+                context: {
+                    name: `${user.fullName}`,
+                    url,
+                },
+            });
+            return "success";
+        }
+        catch (error) {
+            throw new common_1.BadRequestException(error.message);
+        }
     }
     async forgotPassword(user, token) {
         const url = `${this.clientAppUrl}/auth/forgotPassword?token=${token}`;
