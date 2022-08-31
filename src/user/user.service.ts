@@ -37,51 +37,63 @@ export class UserService {
   // └─┘┴└─└─┘┴ ┴ ┴ └─┘  └─┘└─┘└─┘┴└─
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = new this.userModel(createUserDto);
-    await this.isEmailUnique(user.email);
-    this.setRegistrationInfo(user);
-    await user.save();
-    this.mailService.sendUserConfirmation(user);
-    return this.buildRegistrationInfo(user);
+    try {
+      const user = new this.userModel(createUserDto);
+      await this.isEmailUnique(user.email);
+      this.setRegistrationInfo(user);
+      await user.save();
+      this.mailService.sendUserConfirmation(user);
+      return this.buildRegistrationInfo(user);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   // ┬  ┬┌─┐┬─┐┬┌─┐┬ ┬  ┌─┐┌┬┐┌─┐┬┬
   // └┐┌┘├┤ ├┬┘│├┤ └┬┘  ├┤ │││├─┤││
   //  └┘ └─┘┴└─┴└   ┴   └─┘┴ ┴┴ ┴┴┴─┘
   async verifyEmail(@Req() req, verifyUuidDto: string) {
-    const user = await this.findByVerification(verifyUuidDto);
-    await this.setUserAsVerified(user);
-    return {
-      fullName: user.fullName,
-      email: user.email,
-      accessToken: await this.authService.createAccessToken(user._id),
-      refreshToken: await this.authService.createRefreshToken(req, user._id),
-    };
+    try {
+      const user = await this.findByVerification(verifyUuidDto);
+      await this.setUserAsVerified(user);
+      return {
+        fullName: user.fullName,
+        email: user.email,
+        accessToken: await this.authService.createAccessToken(user._id),
+        refreshToken: await this.authService.createRefreshToken(req, user._id),
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   // ┬  ┌─┐┌─┐┬┌┐┌
   // │  │ ││ ┬││││
   // ┴─┘└─┘└─┘┴┘└┘
   async login(@Req() req, loginUserDto: LoginUserDto) {
-    const email = loginUserDto.email;
-    const existingUser = await this.userModel.findOne({ email, verified: false });
-    if (existingUser) {
-      return await existingUser.updateOne({
-        $set: {
-          verificationExpires: addHours(new Date(), this.HOURS_TO_VERIFY),
-        },
-      });
+    try {
+      const email = loginUserDto.email;
+      const existingUser = await this.userModel.findOne({ email, verified: false });
+      if (existingUser) {
+        return await existingUser.updateOne({
+          $set: {
+            verificationExpires: addHours(new Date(), this.HOURS_TO_VERIFY),
+          },
+        });
+      }
+      const user = await this.findUserByEmail(loginUserDto.email);
+      this.isUserBlocked(user);
+      await this.checkPassword(loginUserDto.password, user);
+      await this.passwordsAreMatch(user);
+      return {
+        fullName: user.fullName,
+        email: user.email,
+        accessToken: await this.authService.createAccessToken(user._id),
+        refreshToken: await this.authService.createRefreshToken(req, user._id),
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    const user = await this.findUserByEmail(loginUserDto.email);
-    this.isUserBlocked(user);
-    await this.checkPassword(loginUserDto.password, user);
-    await this.passwordsAreMatch(user);
-    return {
-      fullName: user.fullName,
-      email: user.email,
-      accessToken: await this.authService.createAccessToken(user._id),
-      refreshToken: await this.authService.createRefreshToken(req, user._id),
-    };
   }
 
   // ┬─┐┌─┐┌─┐┬─┐┌─┐┌─┐┬ ┬  ┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐  ┌┬┐┌─┐┬┌─┌─┐┌┐┌
@@ -89,51 +101,67 @@ export class UserService {
   // ┴└─└─┘└  ┴└─└─┘└─┘┴ ┴  ┴ ┴└─┘└─┘└─┘└─┘└─┘   ┴ └─┘┴ ┴└─┘┘└┘
 
   async refreshAccessToken(refreshAccessTokenDto: RefreshAccessTokenDto) {
-    const userId = await this.authService.findRefreshToken(refreshAccessTokenDto.refreshToken);
-    const user = await this.userModel.findById(userId);
-    if (!user) {
-      throw new BadRequestException("Bad request");
+    try {
+      const userId = await this.authService.findRefreshToken(refreshAccessTokenDto.refreshToken);
+      const user = await this.userModel.findById(userId);
+      if (!user) {
+        throw new BadRequestException("Bad request");
+      }
+      return {
+        accessToken: await this.authService.createAccessToken(user._id),
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    return {
-      accessToken: await this.authService.createAccessToken(user._id),
-    };
   }
 
   // ┌─┐┌─┐┬─┐┌─┐┌─┐┌┬┐  ┌─┐┌─┐┌─┐┌─┐┬ ┬┌─┐┬─┐┌┬┐
   // ├┤ │ │├┬┘│ ┬│ │ │   ├─┘├─┤└─┐└─┐││││ │├┬┘ ││
   // └  └─┘┴└─└─┘└─┘ ┴   ┴  ┴ ┴└─┘└─┘└┴┘└─┘┴└──┴┘
   async forgotPassword(req: Request, createForgotPasswordDto: CreateForgotPasswordDto) {
-    await this.findByEmail(createForgotPasswordDto.email);
-    await this.saveForgotPassword(req, createForgotPasswordDto);
-    return {
-      email: createForgotPasswordDto.email,
-      message: "verification sent.",
-    };
+    try {
+      await this.findByEmail(createForgotPasswordDto.email);
+      await this.saveForgotPassword(req, createForgotPasswordDto);
+      return {
+        email: createForgotPasswordDto.email,
+        message: "verification sent.",
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   // ┌─┐┌─┐┬─┐┌─┐┌─┐┌┬┐  ┌─┐┌─┐┌─┐┌─┐┬ ┬┌─┐┬─┐┌┬┐  ┬  ┬┌─┐┬─┐┬┌─┐┬ ┬
   // ├┤ │ │├┬┘│ ┬│ │ │   ├─┘├─┤└─┐└─┐││││ │├┬┘ ││  └┐┌┘├┤ ├┬┘│├┤ └┬┘
   // └  └─┘┴└─└─┘└─┘ ┴   ┴  ┴ ┴└─┘└─┘└┴┘└─┘┴└──┴┘   └┘ └─┘┴└─┴└   ┴
   async forgotPasswordVerify(req: Request, verifyUuidDto: VerifyUuidDto) {
-    const forgotPassword = await this.findForgotPasswordByUuid(verifyUuidDto);
-    await this.setForgotPasswordFirstUsed(req, forgotPassword);
-    return {
-      email: forgotPassword.email,
-      message: "now reset your password.",
-    };
+    try {
+      const forgotPassword = await this.findForgotPasswordByUuid(verifyUuidDto);
+      await this.setForgotPasswordFirstUsed(req, forgotPassword);
+      return {
+        email: forgotPassword.email,
+        message: "now reset your password.",
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   // ┬─┐┌─┐┌─┐┌─┐┌┬┐  ┌─┐┌─┐┌─┐┌─┐┬ ┬┌─┐┬─┐┌┬┐
   // ├┬┘├┤ └─┐├┤  │   ├─┘├─┤└─┐└─┐││││ │├┬┘ ││
   // ┴└─└─┘└─┘└─┘ ┴   ┴  ┴ ┴└─┘└─┘└┴┘└─┘┴└──┴┘
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
-    const forgotPassword = await this.findForgotPasswordByEmail(resetPasswordDto);
-    await this.setForgotPasswordFinalUsed(forgotPassword);
-    await this.resetUserPassword(resetPasswordDto);
-    return {
-      email: resetPasswordDto.email,
-      message: "password successfully changed.",
-    };
+    try {
+      const forgotPassword = await this.findForgotPasswordByEmail(resetPasswordDto);
+      await this.setForgotPasswordFinalUsed(forgotPassword);
+      await this.resetUserPassword(resetPasswordDto);
+      return {
+        email: resetPasswordDto.email,
+        message: "password successfully changed.",
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
   // ┌─┐┬─┐┌─┐┌┬┐┌─┐┌─┐┌┬┐┌─┐┌┬┐  ┌─┐┌─┐┬─┐┬  ┬┬┌─┐┌─┐
   // ├─┘├┬┘│ │ │ ├┤ │   │ ├┤  ││  └─┐├┤ ├┬┘└┐┌┘││  ├┤
@@ -149,9 +177,13 @@ export class UserService {
   // ********************************************
 
   private async isEmailUnique(email: string) {
-    const user = await this.userModel.findOne({ email, verified: true });
-    if (user) {
-      throw new BadRequestException("Email most be unique.");
+    try {
+      const user = await this.userModel.findOne({ email, verified: true });
+      if (user) {
+        throw new BadRequestException("Email most be unique.");
+      }
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -170,19 +202,27 @@ export class UserService {
   }
 
   private async findByVerification(verification: string): Promise<User> {
-    const user = await this.userModel.findOne({ verification, verified: false, verificationExpires: { $gt: new Date() } });
-    if (!user) {
-      throw new BadRequestException("Bad request.");
+    try {
+      const user = await this.userModel.findOne({ verification, verified: false, verificationExpires: { $gt: new Date() } });
+      if (!user) {
+        throw new BadRequestException("Bad request.");
+      }
+      return user;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    return user;
   }
 
   private async findByEmail(email: string): Promise<User> {
-    const user = await this.userModel.findOne({ email, verified: true });
-    if (!user) {
-      throw new NotFoundException("Email not found.");
+    try {
+      const user = await this.userModel.findOne({ email, verified: true });
+      if (!user) {
+        throw new NotFoundException("Email not found.");
+      }
+      return user;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    return user;
   }
 
   private async setUserAsVerified(user) {
@@ -191,20 +231,28 @@ export class UserService {
   }
 
   private async findUserByEmail(email: string): Promise<User> {
-    const user = await this.userModel.findOne({ email, verified: true });
-    if (!user) {
-      throw new NotFoundException("Wrong email or password.");
+    try {
+      const user = await this.userModel.findOne({ email, verified: true });
+      if (!user) {
+        throw new NotFoundException("Wrong email or password.");
+      }
+      return user;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    return user;
   }
 
   private async checkPassword(attemptPass: string, user) {
-    const match = await bcrypt.compare(attemptPass, user.password);
-    if (!match) {
-      await this.passwordsDoNotMatch(user);
-      throw new NotFoundException("Wrong email or password.");
+    try {
+      const match = await bcrypt.compare(attemptPass, user.password);
+      if (!match) {
+        await this.passwordsDoNotMatch(user);
+        throw new NotFoundException("Wrong email or password.");
+      }
+      return match;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    return match;
   }
 
   private isUserBlocked(user) {
@@ -233,49 +281,65 @@ export class UserService {
   }
 
   private async saveForgotPassword(req: Request, createForgotPasswordDto: CreateForgotPasswordDto) {
-    const forgotPassword = await this.forgotPasswordModel.create({
-      email: createForgotPasswordDto.email,
-      verification: v4(),
-      expires: addHours(new Date(), this.HOURS_TO_VERIFY),
-      ip: this.authService.getIp(req),
-      browser: this.authService.getBrowserInfo(req),
-      country: this.authService.getCountry(req),
-    });
-    await forgotPassword.save();
+    try {
+      const forgotPassword = await this.forgotPasswordModel.create({
+        email: createForgotPasswordDto.email,
+        verification: v4(),
+        expires: addHours(new Date(), this.HOURS_TO_VERIFY),
+        ip: this.authService.getIp(req),
+        browser: this.authService.getBrowserInfo(req),
+        country: this.authService.getCountry(req),
+      });
+      await forgotPassword.save();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   private async findForgotPasswordByUuid(verifyUuidDto: VerifyUuidDto): Promise<ForgotPassword> {
-    const forgotPassword = await this.forgotPasswordModel.findOne({
-      verification: verifyUuidDto.verification,
-      firstUsed: false,
-      finalUsed: false,
-      expires: { $gt: new Date() },
-    });
-    if (!forgotPassword) {
-      throw new BadRequestException("Bad request.");
+    try {
+      const forgotPassword = await this.forgotPasswordModel.findOne({
+        verification: verifyUuidDto.verification,
+        firstUsed: false,
+        finalUsed: false,
+        expires: { $gt: new Date() },
+      });
+      if (!forgotPassword) {
+        throw new BadRequestException("Bad request.");
+      }
+      return forgotPassword;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    return forgotPassword;
   }
 
   private async setForgotPasswordFirstUsed(req: Request, forgotPassword: ForgotPassword) {
-    forgotPassword.firstUsed = true;
-    forgotPassword.ipChanged = this.authService.getIp(req);
-    forgotPassword.browserChanged = this.authService.getBrowserInfo(req);
-    forgotPassword.countryChanged = this.authService.getCountry(req);
-    await forgotPassword.save();
+    try {
+      forgotPassword.firstUsed = true;
+      forgotPassword.ipChanged = this.authService.getIp(req);
+      forgotPassword.browserChanged = this.authService.getBrowserInfo(req);
+      forgotPassword.countryChanged = this.authService.getCountry(req);
+      await forgotPassword.save();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   private async findForgotPasswordByEmail(resetPasswordDto: ResetPasswordDto): Promise<ForgotPassword> {
-    const forgotPassword = await this.forgotPasswordModel.findOne({
-      email: resetPasswordDto.email,
-      firstUsed: true,
-      finalUsed: false,
-      expires: { $gt: new Date() },
-    });
-    if (!forgotPassword) {
-      throw new BadRequestException("Bad request.");
+    try {
+      const forgotPassword = await this.forgotPasswordModel.findOne({
+        email: resetPasswordDto.email,
+        firstUsed: true,
+        finalUsed: false,
+        expires: { $gt: new Date() },
+      });
+      if (!forgotPassword) {
+        throw new BadRequestException("Bad request.");
+      }
+      return forgotPassword;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    return forgotPassword;
   }
 
   private async setForgotPasswordFinalUsed(forgotPassword: ForgotPassword) {
@@ -284,72 +348,108 @@ export class UserService {
   }
 
   private async resetUserPassword(resetPasswordDto: ResetPasswordDto) {
-    const user = await this.userModel.findOne({
-      email: resetPasswordDto.email,
-      verified: true,
-    });
-    user.password = resetPasswordDto.password;
-    await user.save();
+    try {
+      const user = await this.userModel.findOne({
+        email: resetPasswordDto.email,
+        verified: true,
+      });
+      user.password = resetPasswordDto.password;
+      await user.save();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
   async find(id: string): Promise<User> {
-    return await this.userModel.findById(id).populate("addresses").exec();
+    try {
+      return await this.userModel.findById(id).populate("addresses").exec();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async update(id: string, payload: Partial<User>) {
-    return this.userModel.updateOne({ _id: id }, payload).populate("addresses");
+    try {
+      return this.userModel.updateOne({ _id: id }, payload).populate("addresses");
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async createAddress(address: CreateAddressDto): Promise<Address> {
-    const existingAddress = await this.addressModel.find(address).exec();
-    if (existingAddress && existingAddress.length > 0) {
-      return existingAddress[0];
+    try {
+      const existingAddress = await this.addressModel.find(address).exec();
+      if (existingAddress && existingAddress.length > 0) {
+        return existingAddress[0];
+      }
+      const newAddress = await new this.addressModel(address);
+      return newAddress.save();
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    const newAddress = await new this.addressModel(address);
-    return newAddress.save();
   }
   async addAddress(address: CreateAddressDto, userId: string) {
-    let addressId;
-    const existingAddress = await this.addressModel.find(address).exec();
-    const user = await this.userModel.findById({ _id: userId }).exec();
-    if (existingAddress && existingAddress.length > 0) {
-      addressId = existingAddress[0]._id;
-      if (!user.addresses.includes(addressId)) {
+    try {
+      let addressId;
+      const existingAddress = await this.addressModel.find(address).exec();
+      const user = await this.userModel.findById({ _id: userId }).exec();
+      if (existingAddress && existingAddress.length > 0) {
+        addressId = existingAddress[0]._id;
+        if (!user.addresses.includes(addressId)) {
+          user.addresses.push(addressId);
+          return await user.save();
+        }
+      } else {
+        const newAddress = new this.addressModel(address);
+        newAddress.save();
+        addressId = newAddress._id;
         user.addresses.push(addressId);
         return await user.save();
       }
-    } else {
-      const newAddress = new this.addressModel(address);
-      newAddress.save();
-      addressId = newAddress._id;
-      user.addresses.push(addressId);
-      return await user.save();
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
   }
   // Irrelevant
   async getAllAddress(): Promise<Address[]> {
-    return await this.addressModel.find({}).populate("user").exec();
+    try {
+      return await this.addressModel.find({}).populate("user").exec();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async getAddress(addressId: string): Promise<Address> {
     return await this.addressModel.findById(addressId).populate("user");
   }
   async getUserAddresses(userId: string) {
-    return await this.userModel
-      .findById({ _id: userId })
-      .populate({
-        path: "addresses",
-        populate: {
-          path: "_id",
-          model: "Address",
-        },
-      })
-      .exec();
+    try {
+      return await this.userModel
+        .findById({ _id: userId })
+        .populate({
+          path: "addresses",
+          populate: {
+            path: "_id",
+            model: "Address",
+          },
+        })
+        .exec();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
   async updateAddress(addressId: string, payload: Partial<CreateAddressDto>, userId: string): Promise<Address> {
-    return this.userModel.updateOne({ _id: addressId, user: userId }, payload).populate("user");
+    try {
+      return this.userModel.updateOne({ _id: addressId, user: userId }, payload).populate("user");
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
   async deleteAddress(addressId: string, userId: string) {
-    return this.userModel.updateOne({ _id: addressId, user: userId });
-    return await this.userModel.findByIdAndDelete(addressId, { active: false });
+    try {
+      await this.userModel.updateOne({ _id: addressId, user: userId });
+      return await this.userModel.findByIdAndDelete(addressId, { active: false });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

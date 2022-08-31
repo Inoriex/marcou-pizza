@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { MailerService } from "@nestjs-modules/mailer";
 import { CreateUserDto } from "@user/dto/create-user.dto";
 import { IReadableUser } from "@user/interfaces/readable-user.interface";
-import { User } from '@user/interfaces/user.interface';
+import { User } from "@user/interfaces/user.interface";
 
 @Injectable()
 export class MailService {
@@ -12,18 +12,22 @@ export class MailService {
     this.clientAppUrl = process.env.CLIENT_APP_URL;
   }
 
-  async sendUserConfirmation(user: User ) {
-    const url = `${this.clientAppUrl}user/verify-email?verification=${user.verification}`;
-    await this.mailerService.sendMail({
-      to: user.email,
-      subject: "Bienvenue sur Marcau Pizza ! Confirmez votre adresse email",
-      template:"confirmation",
-      context: {
-        name: `${user.fullName}`,
-        url,
-      },
-    });
-    return "success";
+  async sendUserConfirmation(user: User) {
+    try {
+      const url = `${this.clientAppUrl}user/verify-email?verification=${user.verification}`;
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: "Bienvenue sur Marcau Pizza ! Confirmez votre adresse email",
+        template: "confirmation",
+        context: {
+          name: `${user.fullName}`,
+          url,
+        },
+      });
+      return "success";
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
   async forgotPassword(user: IReadableUser, token: string): Promise<void> {
     const url = `${this.clientAppUrl}/auth/forgotPassword?token=${token}`;

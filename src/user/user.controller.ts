@@ -23,8 +23,12 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get("/me")
   me(@Req() request) {
-    const userId = request.user.id;
-    return this.userService.find(userId);
+    try {
+      const userId = request.user.id;
+      return this.userService.find(userId);
+    } catch (error) {
+      throw error;
+    }
   }
   @UseGuards(JwtAuthGuard)
   @Get("/address")
@@ -33,9 +37,13 @@ export class UserController {
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "unable to fetch user address" })
   getUserAddresses(@GetUser() user: User) {
-    const userId = user.id;
-    console.log(userId);
-    return this.userService.getUserAddresses(userId);
+    try {
+      const userId = user.id;
+      console.log(userId);
+      return this.userService.getUserAddresses(userId);
+    } catch (error) {
+      throw error;
+    }
   }
   @UseGuards(JwtAuthGuard)
   @Post("address/create")
@@ -44,8 +52,13 @@ export class UserController {
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "unable to create user address" })
   CreateUserAddress(@Req() req, @GetUser() user: User, @Body() address: CreateAddressDto) {
-    const userId = user.id;
-    return this.userService.addAddress(address, userId);
+    try {
+      const userId = user.id;
+      return this.userService.addAddress(address, userId);
+    } catch (error) {
+      console.log(error);
+      throw new Error("unable to create user address");
+    }
   }
   @UseGuards(JwtAuthGuard)
   @Put("/:addressId")
@@ -54,8 +67,12 @@ export class UserController {
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "unable to create user address" })
   UpdateUserAddress(@GetUser() user: User, @Body() address: Partial<CreateAddressDto>, @Param("addressId") addressId: string) {
-    const userId = user.id;
-    return this.userService.updateAddress(addressId, address, userId);
+    try {
+      const userId = user.id;
+      return this.userService.updateAddress(addressId, address, userId);
+    } catch (error) {
+      throw error;
+    }
   }
   @UseGuards(JwtAuthGuard)
   @Delete("/:addressId")
@@ -64,8 +81,12 @@ export class UserController {
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
   @ApiInternalServerErrorResponse({ description: "unable to create user address" })
   DeleteUserAddress(@GetUser() user: User, @Param("addressId") addressId: string) {
+    try {
     const userId = user.id;
     return this.userService.deleteAddress(addressId, userId);
+    } catch (error) {
+      throw error;
+    }
   }
 
   // ╔═╗╦ ╦╔╦╗╦ ╦╔═╗╔╗╔╔╦╗╦╔═╗╔═╗╔╦╗╔═╗
@@ -76,9 +97,14 @@ export class UserController {
   @ApiOperation({ description: "Register user" })
   @ApiCreatedResponse({})
   async register(@Body() createUserDto: CreateUserDto) {
-    const address = await this.userService.createAddress(createUserDto.address);
-    const { address: _, ...createUser } = createUserDto;
-    return await this.userService.create({ ...createUser, addresses: [address._id] });
+    try {
+      const address = await this.userService.createAddress(createUserDto.address);
+      const { address: _, ...createUser } = createUserDto;
+      return await this.userService.create({ ...createUser, addresses: [address._id] });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   @Get("verify-email")
@@ -86,17 +112,26 @@ export class UserController {
   @ApiOperation({ description: "Verify Email" })
   @ApiOkResponse({})
   async verifyEmail(@Req() req, @Query() query: { verification: string }) {
-    return await this.userService.verifyEmail(req, query.verification);
+    try {
+      return await this.userService.verifyEmail(req, query.verification);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
-
 
   @Post("login")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ description: "Login User" })
   @ApiOkResponse({})
   async login(@Req() req, @Body() loginUserDto: LoginUserDto) {
-    console.log(loginUserDto);
-    return await this.userService.login(req, loginUserDto);
+    try {
+      console.log(loginUserDto);
+      return await this.userService.login(req, loginUserDto);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   @Post("refresh-access-token")
@@ -104,7 +139,13 @@ export class UserController {
   @ApiOperation({ description: "Refresh Access Token with refresh token" })
   @ApiCreatedResponse({})
   async refreshAccessToken(@Body() refreshAccessTokenDto: RefreshAccessTokenDto) {
-    return await this.userService.refreshAccessToken(refreshAccessTokenDto);
+    try {
+      return await this.userService.refreshAccessToken(refreshAccessTokenDto);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+
   }
 
   @Post("forgot-password")
@@ -112,7 +153,12 @@ export class UserController {
   @ApiOperation({ description: "Forgot password" })
   @ApiOkResponse({})
   async forgotPassword(@Req() req, @Body() createForgotPasswordDto: CreateForgotPasswordDto) {
+    try {
     return await this.userService.forgotPassword(req, createForgotPasswordDto);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   @Post("forgot-password-verify")
@@ -120,7 +166,12 @@ export class UserController {
   @ApiOperation({ description: "Verfiy forget password code" })
   @ApiOkResponse({})
   async forgotPasswordVerify(@Req() req, @Body() verifyUuidDto: VerifyUuidDto) {
+    try {
     return await this.userService.forgotPasswordVerify(req, verifyUuidDto);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   @Post("reset-password")
@@ -133,7 +184,12 @@ export class UserController {
   })
   @ApiOkResponse({})
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    try {
     return await this.userService.resetPassword(resetPasswordDto);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   @Get("data")
