@@ -164,7 +164,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "register", null);
 __decorate([
-    (0, common_1.Post)("verify-email"),
+    (0, common_1.Get)("verify-email"),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOperation)({ description: "Verify Email" }),
     (0, swagger_1.ApiOkResponse)({}),

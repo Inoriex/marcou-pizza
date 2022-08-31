@@ -81,13 +81,14 @@ export class UserController {
     return await this.userService.create({ ...createUser, addresses: [address._id] });
   }
 
-  @Post("verify-email")
+  @Get("verify-email")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ description: "Verify Email" })
   @ApiOkResponse({})
-  async verifyEmail(@Req() req, @Query() query: { verification: string } )  {
+  async verifyEmail(@Req() req, @Query() query: { verification: string }) {
     return await this.userService.verifyEmail(req, query.verification);
   }
+
 
   @Post("login")
   @HttpCode(HttpStatus.OK)

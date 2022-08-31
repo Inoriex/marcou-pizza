@@ -18,7 +18,7 @@ let MailService = class MailService {
         this.clientAppUrl = process.env.CLIENT_APP_URL;
     }
     async sendUserConfirmation(user) {
-        const url = `${this.clientAppUrl}user/verify-email?=${user.verification}`;
+        const url = `${this.clientAppUrl}user/verify-email?verification=${user.verification}`;
         await this.mailerService.sendMail({
             to: user.email,
             subject: "Bienvenue sur Marcau Pizza ! Confirmez votre adresse email",
