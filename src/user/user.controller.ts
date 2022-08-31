@@ -75,8 +75,7 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ description: "Register user" })
   @ApiCreatedResponse({})
-  async register(@GetUser() user: User, @Body() createUserDto: CreateUserDto) {
-    const userId = user.id;
+  async register(@Body() createUserDto: CreateUserDto) {
     const address = await this.userService.createAddress(createUserDto.address);
     const { address: _, ...createUser } = createUserDto;
     return await this.userService.create({ ...createUser, addresses: [address._id] });

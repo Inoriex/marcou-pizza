@@ -56,7 +56,7 @@ export class CreateUserDto {
 
   @IsOptional()
   @ApiPropertyOptional()
-  readonly address: IAddress;
+  readonly address?: IAddress;
 
   @ApiProperty()
   @IsString()
