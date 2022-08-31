@@ -10,8 +10,8 @@ export class MailService {
   private readonly apiUrl: string;
 
   constructor(private mailerService: MailerService) {
-    this.clientAppUrl = process.env.API_URL;
-    this.apiUrl = process.env.CLIENT_APP_URL;
+    this.clientAppUrl = process.env.CLIENT_APP_URL;
+    this.apiUrl = process.env.API_URL;
   }
 
   async sendUserConfirmation(user: User) {
