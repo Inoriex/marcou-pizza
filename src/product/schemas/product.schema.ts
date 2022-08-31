@@ -17,7 +17,7 @@ export type ProductDocument = Product & mongoose.Document;
 export class Product extends Document {
   @Transform(({ value }) => value.toString())
   _id: string;
-  @Prop()
+  @Prop({ required: true })
   name: string;
   @Prop()
   image?: string;

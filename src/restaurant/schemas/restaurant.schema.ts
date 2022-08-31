@@ -9,16 +9,16 @@ export class Restaurant extends Document {
   @Transform(({ value }) => value.toString())
   _id: string;
 
-  @Prop()
+  @Prop({ required: true })
   title: string;
 
   @Prop()
   image?: string;
 
-  @Prop()
+  @Prop({ required: true })
   ceo: string;
 
-  @Prop()
+  @Prop({ required: true })
   tel: string;
 
   @Prop()

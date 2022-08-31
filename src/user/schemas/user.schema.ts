@@ -24,7 +24,7 @@ export class User {
 
   @MinLength(6)
   @MaxLength(255)
-  @Prop({ unique: true })
+  @Prop({ unique: true, required: true })
   email: string;
 
   @Prop({ default: null })
@@ -33,14 +33,14 @@ export class User {
   @Prop({ default: null })
   avatarId: string;
 
-  @Prop()
+  @Prop({required: true})
   @MinLength(2)
   @MaxLength(255)
   lastName: string;
 
   @MinLength(2)
   @MaxLength(255)
-  @Prop()
+  @Prop({ type: String, required: true})
   firstName: string;
 
   @Prop({ type: String, required: true, enum: Object.values(genderEnum) })
@@ -67,7 +67,7 @@ export class User {
   @Prop({ default: new Date() })
   blockExpires: Date;
 
-  @Prop()
+  @Prop({required: true})
   @MinLength(User.passwordMinLength)
   @Exclude()
   password: string;

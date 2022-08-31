@@ -10,19 +10,19 @@ export class Address {
   @Transform(({ value }) => value.toString())
   _id: string;
 
-  @Prop({default: 'Addresse 1'})
+  @Prop({ default: "Addresse 1" })
   name: string;
 
-  @Prop()
+  @Prop({ required: true })
   city: string;
 
-  @Prop()
+  @Prop({ required: true })
   zip: string;
 
-  @Prop({default: 'France'})
+  @Prop({ default: "France" })
   country: string;
 
-  @Prop()
+  @Prop({ required: true })
   addressLine1: string;
 
   @Prop()

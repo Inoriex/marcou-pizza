@@ -9,7 +9,7 @@ export class Category {
   @Transform(({ value }) => value.toString())
   _id: string;
 
-  @Prop({ unique: true })
+  @Prop({ unique: true, required: true })
   name: string;
 }
 

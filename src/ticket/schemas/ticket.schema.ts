@@ -15,11 +15,11 @@ export class Ticket extends Document {
   /* @Prop()
   num: string; */
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Order" })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Order", required: true })
   @Type(() => Order)
   order: Order;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "User" })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "User", required: true })
   @Type(() => User)
   user: User;
 

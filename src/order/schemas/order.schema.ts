@@ -11,7 +11,7 @@ export class Order extends Document {
   @Transform(({ value }) => value.toString())
   _id: string;
 
-  @Prop()
+  @Prop({ required: true })
   articles: {
     articleId: { type: MongooseSchema.Types.ObjectId; ref: "Product" };
     quantity: number;
@@ -19,20 +19,20 @@ export class Order extends Document {
     totalArticlePrice: number;
   }[];
 
-  @Prop()
+  @Prop({ required: true })
   totalTTC: number;
 
   @Prop({ type: String, enum: Object.values(orderStatus), default: orderStatus.pending })
   status: orderStatus;
 
-  @Prop()
+  @Prop({ required: true })
   payment: string;
 
   /*
   @Prop()
   paymentStatus: string; */
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "User" })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "User", required: true })
   @Type(() => User)
   client: User;
 
