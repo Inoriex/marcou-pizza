@@ -56,12 +56,12 @@ export class CreateUserDto {
 
   @IsOptional()
   @ApiPropertyOptional()
-  readonly address?: IAddress;
+  readonly address: IAddress;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  readonly phone: string;
+  readonly phone?: string;
 
   readonly roles: string[];
 

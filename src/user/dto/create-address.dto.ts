@@ -20,7 +20,7 @@ export class CreateAddressDto {
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
-  readonly cp: string;
+  readonly zip: string;
 
   @IsString()
   @IsOptional()
