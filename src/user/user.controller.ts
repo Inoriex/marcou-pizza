@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards, Req, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards, Req, Res, Query, Redirect } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOkResponse, ApiTags, ApiBearerAuth, ApiHeader, ApiOperation, ApiInternalServerErrorResponse, ApiBadRequestResponse } from "@nestjs/swagger";
 import { AuthGuard, PassportModule } from "@nestjs/passport";
 import { UserService } from "@user/user.service";
@@ -14,7 +14,7 @@ import { VerifyUuidDto } from "./dto/verify-uuid.dto";
 import { RefreshAccessTokenDto } from "./dto/refresh-access-token.dto";
 import { User } from "@user/interfaces/user.interface";
 import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard";
-
+import { Response } from "express";
 @ApiTags("api/user")
 @Controller("api/user")
 @UseGuards(RolesGuard)
@@ -82,8 +82,8 @@ export class UserController {
   @ApiInternalServerErrorResponse({ description: "unable to create user address" })
   DeleteUserAddress(@GetUser() user: User, @Param("addressId") addressId: string) {
     try {
-    const userId = user.id;
-    return this.userService.deleteAddress(addressId, userId);
+      const userId = user.id;
+      return this.userService.deleteAddress(addressId, userId);
     } catch (error) {
       throw error;
     }
@@ -111,9 +111,11 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ description: "Verify Email" })
   @ApiOkResponse({})
-  async verifyEmail(@Req() req, @Query() query: { verification: string }) {
+  @Redirect()
+  async verifyEmail(@Req() req, @Res() res: Response, @Query() query: { verification: string }) {
     try {
-      return await this.userService.verifyEmail(req, query.verification);
+      await this.userService.verifyEmail(req, query.verification);
+      return { url: process.env.CLIENT_APP_URL + "account" };
     } catch (error) {
       console.log(error);
       throw error;
@@ -126,7 +128,6 @@ export class UserController {
   @ApiOkResponse({})
   async login(@Req() req, @Body() loginUserDto: LoginUserDto) {
     try {
-      console.log(loginUserDto);
       return await this.userService.login(req, loginUserDto);
     } catch (error) {
       console.log(error);
@@ -145,7 +146,6 @@ export class UserController {
       console.log(error);
       throw error;
     }
-
   }
 
   @Post("forgot-password")
@@ -154,7 +154,7 @@ export class UserController {
   @ApiOkResponse({})
   async forgotPassword(@Req() req, @Body() createForgotPasswordDto: CreateForgotPasswordDto) {
     try {
-    return await this.userService.forgotPassword(req, createForgotPasswordDto);
+      return await this.userService.forgotPassword(req, createForgotPasswordDto);
     } catch (error) {
       console.log(error);
       throw error;
@@ -167,7 +167,7 @@ export class UserController {
   @ApiOkResponse({})
   async forgotPasswordVerify(@Req() req, @Body() verifyUuidDto: VerifyUuidDto) {
     try {
-    return await this.userService.forgotPasswordVerify(req, verifyUuidDto);
+      return await this.userService.forgotPasswordVerify(req, verifyUuidDto);
     } catch (error) {
       console.log(error);
       throw error;
@@ -185,7 +185,7 @@ export class UserController {
   @ApiOkResponse({})
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     try {
-    return await this.userService.resetPassword(resetPasswordDto);
+      return await this.userService.resetPassword(resetPasswordDto);
     } catch (error) {
       console.log(error);
       throw error;

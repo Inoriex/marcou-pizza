@@ -16,10 +16,11 @@ let MailService = class MailService {
     constructor(mailerService) {
         this.mailerService = mailerService;
         this.clientAppUrl = process.env.CLIENT_APP_URL;
+        this.apiUrl = process.env.API_URL;
     }
     async sendUserConfirmation(user) {
         try {
-            const url = `${this.clientAppUrl}user/verify-email?verification=${user.verification}`;
+            const url = `${this.apiUrl}user/verify-email?verification=${user.verification}`;
             await this.mailerService.sendMail({
                 to: user.email,
                 subject: "Bienvenue sur Marcau Pizza ! Confirmez votre adresse email",

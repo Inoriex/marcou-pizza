@@ -6,7 +6,7 @@ import { CreateAddressDto } from "@user/dto/create-address.dto";
 import { ResetPasswordDto } from "@user/dto/reset-password.dto";
 import { AuthService } from "@auth/auth.service";
 import { LoginUserDto } from "@user/dto/login-user.dto";
-import { Injectable, BadRequestException, Req, NotFoundException, ConflictException } from "@nestjs/common";
+import { Injectable, BadRequestException, Req, NotFoundException, ConflictException, Res } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { v4 } from "uuid";
@@ -17,7 +17,7 @@ import { VerifyUuidDto } from "@user/dto/verify-uuid.dto";
 import { RefreshAccessTokenDto } from "@user/dto/refresh-access-token.dto";
 import { ForgotPassword } from "@user/interfaces/forgot-password.interface";
 import { MailService } from "@/mail/mail.service";
-
+import { Response } from "express";
 @Injectable()
 export class UserService {
   HOURS_TO_VERIFY = 4;
@@ -62,7 +62,6 @@ export class UserService {
         accessToken: await this.authService.createAccessToken(user._id),
         refreshToken: await this.authService.createRefreshToken(req, user._id),
       };
-      window.location.replace(process.env.CLIENT_APP_URL +'account');
     } catch (error) {
       throw new BadRequestException(error.message);
     }

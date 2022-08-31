@@ -22,12 +22,7 @@ export declare class UserService {
     LOGIN_ATTEMPTS_TO_BLOCK: number;
     constructor(userModel: Model<User>, forgotPasswordModel: Model<ForgotPassword>, addressModel: Model<Address>, authService: AuthService, mailService: MailService);
     create(createUserDto: CreateUserDto): Promise<User>;
-    verifyEmail(req: any, verifyUuidDto: string): Promise<{
-        fullName: string;
-        email: string;
-        accessToken: string;
-        refreshToken: string;
-    }>;
+    verifyEmail(req: any, verifyUuidDto: string): Promise<void>;
     login(req: any, loginUserDto: LoginUserDto): Promise<any>;
     refreshAccessToken(refreshAccessTokenDto: RefreshAccessTokenDto): Promise<{
         accessToken: string;

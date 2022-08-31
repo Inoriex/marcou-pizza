@@ -101,9 +101,10 @@ let UserController = class UserController {
             throw error;
         }
     }
-    async verifyEmail(req, query) {
+    async verifyEmail(req, res, query) {
         try {
-            return await this.userService.verifyEmail(req, query.verification);
+            await this.userService.verifyEmail(req, query.verification);
+            return { url: process.env.CLIENT_APP_URL + "account" };
         }
         catch (error) {
             console.log(error);
@@ -112,7 +113,6 @@ let UserController = class UserController {
     }
     async login(req, loginUserDto) {
         try {
-            console.log(loginUserDto);
             return await this.userService.login(req, loginUserDto);
         }
         catch (error) {
@@ -236,10 +236,12 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOperation)({ description: "Verify Email" }),
     (0, swagger_1.ApiOkResponse)({}),
+    (0, common_1.Redirect)(),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Query)()),
+    __param(1, (0, common_1.Res)()),
+    __param(2, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "verifyEmail", null);
 __decorate([

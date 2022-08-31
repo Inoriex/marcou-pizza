@@ -7,6 +7,7 @@ import { CreateUserDto } from "./dto/create-user-address.dto";
 import { VerifyUuidDto } from "./dto/verify-uuid.dto";
 import { RefreshAccessTokenDto } from "./dto/refresh-access-token.dto";
 import { User } from "@user/interfaces/user.interface";
+import { Response } from "express";
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
@@ -22,13 +23,10 @@ export declare class UserController {
         _id: import("mongoose").Types.ObjectId;
     }>;
     register(createUserDto: CreateUserDto): Promise<User>;
-    verifyEmail(req: any, query: {
+    verifyEmail(req: any, res: Response, query: {
         verification: string;
     }): Promise<{
-        fullName: string;
-        email: string;
-        accessToken: string;
-        refreshToken: string;
+        url: string;
     }>;
     login(req: any, loginUserDto: LoginUserDto): Promise<any>;
     refreshAccessToken(refreshAccessTokenDto: RefreshAccessTokenDto): Promise<{

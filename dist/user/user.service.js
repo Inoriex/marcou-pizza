@@ -50,7 +50,7 @@ let UserService = class UserService {
         try {
             const user = await this.findByVerification(verifyUuidDto);
             await this.setUserAsVerified(user);
-            return {
+            const token = {
                 fullName: user.fullName,
                 email: user.email,
                 accessToken: await this.authService.createAccessToken(user._id),
