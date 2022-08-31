@@ -22,7 +22,6 @@ MailModule = __decorate([
                 useFactory: async (config) => ({
                     transport: {
                         host: config.get("MAIL_HOST"),
-                        secure: false,
                         auth: {
                             user: config.get("MAIL_USER"),
                             pass: config.get("MAIL_PASSWORD"),

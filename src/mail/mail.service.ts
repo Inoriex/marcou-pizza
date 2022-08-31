@@ -17,7 +17,7 @@ export class MailService {
     await this.mailerService.sendMail({
       to: user.email,
       subject: "Bienvenue sur Marcau Pizza ! Confirmez votre adresse email",
-      template: "/confirmation",
+      template:"confirmation",
       context: {
         name: `${user.fullName}`,
         url,

@@ -17,17 +17,18 @@ let MailService = class MailService {
         this.mailerService = mailerService;
         this.clientAppUrl = process.env.CLIENT_APP_URL;
     }
-    async sendUserConfirmation(user, token) {
-        const url = `example.com/auth/confirm?token=${token}`;
+    async sendUserConfirmation(user) {
+        const url = `${this.clientAppUrl}user/verify-email?=${user.verification}`;
         await this.mailerService.sendMail({
             to: user.email,
             subject: "Bienvenue sur Marcau Pizza ! Confirmez votre adresse email",
-            template: "/confirmation",
+            template: "confirmation",
             context: {
-                name: `${user.firstName} ${user.lastName}`,
+                name: `${user.fullName}`,
                 url,
             },
         });
+        return "success";
     }
     async forgotPassword(user, token) {
         const url = `${this.clientAppUrl}/auth/forgotPassword?token=${token}`;

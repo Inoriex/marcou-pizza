@@ -20,7 +20,7 @@ export declare class User {
     loginAttemps: number;
     blockExpires: Date;
     password: string;
-    addresses: {
+    addresses?: {
         address: Address;
     }[];
     constructor(partial: Partial<User>);

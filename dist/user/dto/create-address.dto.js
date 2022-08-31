@@ -37,7 +37,7 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiPropertyOptional)(),
     __metadata("design:type", String)
-], CreateAddressDto.prototype, "cp", void 0);
+], CreateAddressDto.prototype, "zip", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),

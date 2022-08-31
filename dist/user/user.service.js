@@ -21,13 +21,14 @@ const mongoose_2 = require("mongoose");
 const uuid_1 = require("uuid");
 const date_fns_1 = require("date-fns");
 const bcrypt = require("bcrypt");
-const verify_uuid_dto_1 = require("./dto/verify-uuid.dto");
+const mail_service_1 = require("../mail/mail.service");
 let UserService = class UserService {
-    constructor(userModel, forgotPasswordModel, addressModel, authService) {
+    constructor(userModel, forgotPasswordModel, addressModel, authService, mailService) {
         this.userModel = userModel;
         this.forgotPasswordModel = forgotPasswordModel;
         this.addressModel = addressModel;
         this.authService = authService;
+        this.mailService = mailService;
         this.HOURS_TO_VERIFY = 4;
         this.HOURS_TO_BLOCK = 6;
         this.LOGIN_ATTEMPTS_TO_BLOCK = 5;
@@ -37,10 +38,11 @@ let UserService = class UserService {
         await this.isEmailUnique(user.email);
         this.setRegistrationInfo(user);
         await user.save();
+        this.mailService.sendUserConfirmation(user);
         return this.buildRegistrationInfo(user);
     }
     async verifyEmail(req, verifyUuidDto) {
-        const user = await this.findByVerification(verifyUuidDto.verification);
+        const user = await this.findByVerification(verifyUuidDto);
         await this.setUserAsVerified(user);
         return {
             fullName: user.fullName,
@@ -296,7 +298,7 @@ let UserService = class UserService {
 __decorate([
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, verify_uuid_dto_1.VerifyUuidDto]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UserService.prototype, "verifyEmail", null);
 __decorate([
@@ -313,7 +315,8 @@ UserService = __decorate([
     __metadata("design:paramtypes", [mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model,
-        auth_service_1.AuthService])
+        auth_service_1.AuthService,
+        mail_service_1.MailService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

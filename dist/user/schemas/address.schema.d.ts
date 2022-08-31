@@ -29,7 +29,7 @@ export declare class Address {
     _id: string;
     name: string;
     city: string;
-    cp: string;
+    zip: string;
     country: string;
     addressLine1: string;
     addressLine2: string;

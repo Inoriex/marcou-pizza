@@ -21,23 +21,23 @@ __decorate([
     __metadata("design:type", String)
 ], Address.prototype, "_id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ default: "Addresse 1" }),
     __metadata("design:type", String)
 ], Address.prototype, "name", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], Address.prototype, "city", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
-], Address.prototype, "cp", void 0);
+], Address.prototype, "zip", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ default: "France" }),
     __metadata("design:type", String)
 ], Address.prototype, "country", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], Address.prototype, "addressLine1", void 0);
 __decorate([

@@ -64,14 +64,13 @@ let UserController = class UserController {
         const userId = user.id;
         return this.userService.deleteAddress(addressId, userId);
     }
-    async register(user, createUserDto) {
-        const userId = user.id;
+    async register(createUserDto) {
         const address = await this.userService.createAddress(createUserDto.address);
         const { address: _ } = createUserDto, createUser = __rest(createUserDto, ["address"]);
         return await this.userService.create(Object.assign(Object.assign({}, createUser), { addresses: [address._id] }));
     }
-    async verifyEmail(req, verifyUuidDto) {
-        return await this.userService.verifyEmail(req, verifyUuidDto);
+    async verifyEmail(req, query) {
+        return await this.userService.verifyEmail(req, query.verification);
     }
     async login(req, loginUserDto) {
         console.log(loginUserDto);
@@ -159,10 +158,9 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     (0, swagger_1.ApiOperation)({ description: "Register user" }),
     (0, swagger_1.ApiCreatedResponse)({}),
-    __param(0, (0, get_user_decorator_1.GetUser)()),
-    __param(1, (0, common_1.Body)()),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, create_user_address_dto_1.CreateUserDto]),
+    __metadata("design:paramtypes", [create_user_address_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "register", null);
 __decorate([
@@ -171,9 +169,9 @@ __decorate([
     (0, swagger_1.ApiOperation)({ description: "Verify Email" }),
     (0, swagger_1.ApiOkResponse)({}),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Request, verify_uuid_dto_1.VerifyUuidDto]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "verifyEmail", null);
 __decorate([
@@ -184,7 +182,7 @@ __decorate([
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Request, login_user_dto_1.LoginUserDto]),
+    __metadata("design:paramtypes", [Object, login_user_dto_1.LoginUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "login", null);
 __decorate([
@@ -205,7 +203,7 @@ __decorate([
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Request, create_forgot_password_dto_1.CreateForgotPasswordDto]),
+    __metadata("design:paramtypes", [Object, create_forgot_password_dto_1.CreateForgotPasswordDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "forgotPassword", null);
 __decorate([
@@ -216,7 +214,7 @@ __decorate([
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Request, verify_uuid_dto_1.VerifyUuidDto]),
+    __metadata("design:paramtypes", [Object, verify_uuid_dto_1.VerifyUuidDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "forgotPasswordVerify", null);
 __decorate([

@@ -19,7 +19,7 @@ __decorate([
     __metadata("design:type", String)
 ], Category.prototype, "_id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ unique: true }),
+    (0, mongoose_1.Prop)({ unique: true, required: true }),
     __metadata("design:type", String)
 ], Category.prototype, "name", void 0);
 Category = __decorate([

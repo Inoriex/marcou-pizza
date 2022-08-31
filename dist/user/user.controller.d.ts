@@ -46,22 +46,24 @@ export declare class UserController {
     DeleteUserAddress(user: User, addressId: string): Promise<import("mongodb").UpdateResult | (User & {
         _id: import("mongoose").Types.ObjectId;
     })>;
-    register(user: User, createUserDto: CreateUserDto): Promise<User>;
-    verifyEmail(req: Request, verifyUuidDto: VerifyUuidDto): Promise<{
+    register(createUserDto: CreateUserDto): Promise<User>;
+    verifyEmail(req: any, query: {
+        verification: string;
+    }): Promise<{
         fullName: string;
         email: string;
         accessToken: string;
         refreshToken: string;
     }>;
-    login(req: Request, loginUserDto: LoginUserDto): Promise<any>;
+    login(req: any, loginUserDto: LoginUserDto): Promise<any>;
     refreshAccessToken(refreshAccessTokenDto: RefreshAccessTokenDto): Promise<{
         accessToken: string;
     }>;
-    forgotPassword(req: Request, createForgotPasswordDto: CreateForgotPasswordDto): Promise<{
+    forgotPassword(req: any, createForgotPasswordDto: CreateForgotPasswordDto): Promise<{
         email: string;
         message: string;
     }>;
-    forgotPasswordVerify(req: Request, verifyUuidDto: VerifyUuidDto): Promise<{
+    forgotPasswordVerify(req: any, verifyUuidDto: VerifyUuidDto): Promise<{
         email: string;
         message: string;
     }>;

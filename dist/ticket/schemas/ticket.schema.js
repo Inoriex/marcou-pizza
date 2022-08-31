@@ -22,12 +22,12 @@ __decorate([
     __metadata("design:type", String)
 ], Ticket.prototype, "_id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "Order" }),
+    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "Order", required: true }),
     (0, class_transformer_1.Type)(() => order_schema_1.Order),
     __metadata("design:type", order_schema_1.Order)
 ], Ticket.prototype, "order", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "User" }),
+    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "User", required: true }),
     (0, class_transformer_1.Type)(() => user_schema_1.User),
     __metadata("design:type", user_schema_1.User)
 ], Ticket.prototype, "user", void 0);

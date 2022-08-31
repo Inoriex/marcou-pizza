@@ -21,7 +21,7 @@ __decorate([
     __metadata("design:type", String)
 ], Restaurant.prototype, "_id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], Restaurant.prototype, "title", void 0);
 __decorate([
@@ -29,11 +29,11 @@ __decorate([
     __metadata("design:type", String)
 ], Restaurant.prototype, "image", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], Restaurant.prototype, "ceo", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], Restaurant.prototype, "tel", void 0);
 __decorate([

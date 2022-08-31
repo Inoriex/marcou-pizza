@@ -22,11 +22,11 @@ __decorate([
     __metadata("design:type", String)
 ], Order.prototype, "_id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", Array)
 ], Order.prototype, "articles", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", Number)
 ], Order.prototype, "totalTTC", void 0);
 __decorate([
@@ -34,11 +34,11 @@ __decorate([
     __metadata("design:type", String)
 ], Order.prototype, "status", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], Order.prototype, "payment", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "User" }),
+    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: "User", required: true }),
     (0, class_transformer_1.Type)(() => user_schema_1.User),
     __metadata("design:type", user_schema_1.User)
 ], Order.prototype, "client", void 0);

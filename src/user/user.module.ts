@@ -6,6 +6,7 @@ import { UserService } from "@user/user.service";
 import { AddressSchema } from "@user/schemas/address.schema";
 import { AuthModule } from "@auth/auth.module";
 import { ForgotPasswordSchema } from "./schemas/forgot-password.schema";
+import { MailModule } from "@/mail/mail.module";
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ForgotPasswordSchema } from "./schemas/forgot-password.schema";
     MongooseModule.forFeature([{ name: "Address", schema: AddressSchema }]),
     MongooseModule.forFeature([{ name: "ForgotPassword", schema: ForgotPasswordSchema }]),
     AuthModule,
+    MailModule,
   ],
   controllers: [UserController],
   providers: [UserService],

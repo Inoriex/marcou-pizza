@@ -34,17 +34,19 @@ import { CreateForgotPasswordDto } from "@user/dto/create-forgot-password.dto";
 import { VerifyUuidDto } from "@user/dto/verify-uuid.dto";
 import { RefreshAccessTokenDto } from "@user/dto/refresh-access-token.dto";
 import { ForgotPassword } from "@user/interfaces/forgot-password.interface";
+import { MailService } from "@/mail/mail.service";
 export declare class UserService {
     private readonly userModel;
     private readonly forgotPasswordModel;
     private readonly addressModel;
     private readonly authService;
+    private readonly mailService;
     HOURS_TO_VERIFY: number;
     HOURS_TO_BLOCK: number;
     LOGIN_ATTEMPTS_TO_BLOCK: number;
-    constructor(userModel: Model<User>, forgotPasswordModel: Model<ForgotPassword>, addressModel: Model<Address>, authService: AuthService);
+    constructor(userModel: Model<User>, forgotPasswordModel: Model<ForgotPassword>, addressModel: Model<Address>, authService: AuthService, mailService: MailService);
     create(createUserDto: CreateUserDto): Promise<User>;
-    verifyEmail(req: any, verifyUuidDto: VerifyUuidDto): Promise<{
+    verifyEmail(req: any, verifyUuidDto: string): Promise<{
         fullName: string;
         email: string;
         accessToken: string;

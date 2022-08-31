@@ -32,7 +32,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.MinLength)(6),
     (0, class_validator_1.MaxLength)(255),
-    (0, mongoose_1.Prop)({ unique: true }),
+    (0, mongoose_1.Prop)({ unique: true, required: true }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
@@ -44,7 +44,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "avatarId", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     (0, class_validator_1.MinLength)(2),
     (0, class_validator_1.MaxLength)(255),
     __metadata("design:type", String)
@@ -52,7 +52,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.MinLength)(2),
     (0, class_validator_1.MaxLength)(255),
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ type: String, required: true }),
     __metadata("design:type", String)
 ], User.prototype, "firstName", void 0);
 __decorate([
@@ -88,7 +88,7 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "blockExpires", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true }),
     (0, class_validator_1.MinLength)(User_1.passwordMinLength),
     (0, class_transformer_1.Exclude)(),
     __metadata("design:type", String)
