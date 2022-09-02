@@ -94,10 +94,10 @@ let AuthService = class AuthService {
         return (0, request_ip_1.getClientIp)(req);
     }
     getBrowserInfo(req) {
-        return req.header["user-agent"] || "XX";
+        return req.headers["user-agent"] || "XX";
     }
     getCountry(req) {
-        return req.header["cf-ipcountry"] ? req.header["cf-ipcountry"] : "XX";
+        return req.headers["cf-ipcountry"] ? req.headers["cf-ipcountry"] : "XX";
     }
     encryptText(text) {
         return this.cryptr.encrypt(text);

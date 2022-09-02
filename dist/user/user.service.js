@@ -81,6 +81,7 @@ let UserService = class UserService {
                 email: user.email,
                 accessToken: await this.authService.createAccessToken(user._id),
                 refreshToken: await this.authService.createRefreshToken(req, user._id),
+                roles: user.roles,
             };
         }
         catch (error) {
@@ -200,7 +201,7 @@ let UserService = class UserService {
         try {
             const user = await this.userModel.findOne({ email, verified: true });
             if (!user) {
-                throw new common_1.NotFoundException("Wrong email or password.");
+                throw new common_1.NotFoundException("Mauvais email ou mot de passe");
             }
             return user;
         }
@@ -213,7 +214,7 @@ let UserService = class UserService {
             const match = await bcrypt.compare(attemptPass, user.password);
             if (!match) {
                 await this.passwordsDoNotMatch(user);
-                throw new common_1.NotFoundException("Wrong email or password.");
+                throw new common_1.NotFoundException("Mauvais email ou mot de passe");
             }
             return match;
         }
