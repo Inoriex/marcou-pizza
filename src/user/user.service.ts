@@ -112,7 +112,7 @@ export class UserService {
         accessToken: await this.authService.createAccessToken(user._id),
       };
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(refreshAccessTokenDto.refreshToken);
     }
   }
 
@@ -235,7 +235,7 @@ export class UserService {
     try {
       const user = await this.userModel.findOne({ email, verified: true });
       if (!user) {
-        throw new NotFoundException("Mauvais email ou mot de passe");
+        throw new NotFoundException("Email ou mot de passe incorrect");
       }
       return user;
     } catch (error) {
@@ -248,7 +248,7 @@ export class UserService {
       const match = await bcrypt.compare(attemptPass, user.password);
       if (!match) {
         await this.passwordsDoNotMatch(user);
-        throw new NotFoundException("Mauvais email ou mot de passe");
+        throw new NotFoundException("Email ou mot de passe incorrect");
       }
       return match;
     } catch (error) {
@@ -258,7 +258,7 @@ export class UserService {
 
   private isUserBlocked(user) {
     if (user.blockExpires > Date.now()) {
-      throw new ConflictException("User has been blocked try later.");
+      throw new ConflictException("Votre compte a été temporairement blocké, veuillez reessayer plus tard");
     }
   }
 
@@ -267,7 +267,7 @@ export class UserService {
     await user.save();
     if (user.loginAttempts >= this.LOGIN_ATTEMPTS_TO_BLOCK) {
       await this.blockUser(user);
-      throw new ConflictException("User blocked.");
+      throw new ConflictException("Votre compte a été temporairement blocké");
     }
   }
 

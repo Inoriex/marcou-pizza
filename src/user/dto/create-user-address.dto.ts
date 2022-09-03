@@ -69,13 +69,13 @@ export class CreateUserDto {
     example: "Secret password",
     description: "The password of the User",
     format: "string",
-    minLength: 5,
+    minLength: 8,
     maxLength: 1024,
   })
   @IsString()
   @IsNotEmpty()
-  @Matches(/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{7,})/, { message: "Weak password" })
-  @MinLength(5)
+  @Matches(/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})/, { message: "Weak password" })
+  @MinLength(8)
   @MaxLength(1024)
   readonly password: string;
 }

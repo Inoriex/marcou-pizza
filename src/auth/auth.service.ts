@@ -67,6 +67,7 @@ export class AuthService {
 
   async findRefreshToken(token: string) {
     const refreshToken = await this.refreshTokenModel.findOne({ refreshToken: token });
+    console.log(token)
     if (!refreshToken) {
       throw new UnauthorizedException("User has been logged out.");
     }

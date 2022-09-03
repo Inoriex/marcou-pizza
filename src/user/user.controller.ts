@@ -35,7 +35,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully fetched" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
-  @ApiInternalServerErrorResponse({ description: "unable to fetch user address" })
+  @ApiInternalServerErrorResponse({ description: "Impossible de récupérer l'adresse de l'utilisateur" })
   getUserAddresses(@GetUser() user: User) {
     try {
       const userId = user.id;
@@ -50,7 +50,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully created" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
-  @ApiInternalServerErrorResponse({ description: "unable to create user address" })
+  @ApiInternalServerErrorResponse({ description: "Impossible de créer l'adresse de l'utilisateur" })
   CreateUserAddress(@Req() req, @GetUser() user: User, @Body() address: CreateAddressDto) {
     try {
       const userId = user.id;
@@ -65,7 +65,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully created" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
-  @ApiInternalServerErrorResponse({ description: "unable to create user address" })
+  @ApiInternalServerErrorResponse({ description: "Impossible de modifier l'adresse de l'utilisateur" })
   UpdateUserAddress(@GetUser() user: User, @Body() address: Partial<CreateAddressDto>, @Param("addressId") addressId: string) {
     try {
       const userId = user.id;
@@ -79,7 +79,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "user address successfully created" })
   @ApiBadRequestResponse({ description: "PARAMETERS_FAILED_VALIDATION" })
-  @ApiInternalServerErrorResponse({ description: "unable to create user address" })
+  @ApiInternalServerErrorResponse({ description: "Impossible de supprimer l'adresse de l'utilisateur" })
   DeleteUserAddress(@GetUser() user: User, @Param("addressId") addressId: string) {
     try {
       const userId = user.id;

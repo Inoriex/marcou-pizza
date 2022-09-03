@@ -100,7 +100,7 @@ let UserService = class UserService {
             };
         }
         catch (error) {
-            throw new common_1.BadRequestException(error.message);
+            throw new common_1.BadRequestException(refreshAccessTokenDto.refreshToken);
         }
     }
     async forgotPassword(req, createForgotPasswordDto) {
