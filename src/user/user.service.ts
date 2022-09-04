@@ -45,7 +45,13 @@ export class UserService {
       this.mailService.sendUserConfirmation(user);
       return this.buildRegistrationInfo(user);
     } catch (error) {
-      throw new BadRequestException(error.message);
+      if (error.code !== 11000) {
+        console.log(error);
+        throw new BadRequestException("Une erreur est survenue");
+      }
+      if (error.code === 11000) {
+        throw new ConflictException("L'email existe déjà");
+      }
     }
   }
 
@@ -66,7 +72,7 @@ export class UserService {
       throw new BadRequestException(error.message);
     }
   }
-  async resendEmail(email: string): Promise<Partial<User['verification']>> {
+  async resendEmail(email: string): Promise<Partial<User["verification"]>> {
     try {
       const user = await this.userModel.findOne({ email, verified: false });
       const verifiedUser = await this.userModel.findOne({ email, verified: true });
@@ -197,7 +203,7 @@ export class UserService {
     try {
       const user = await this.userModel.findOne({ email, verified: true });
       if (user) {
-        throw new BadRequestException("Email most be unique.");
+        throw new BadRequestException("Email must be unique.");
       }
     } catch (error) {
       throw new BadRequestException(error.message);
