@@ -66,7 +66,23 @@ export class UserService {
       throw new BadRequestException(error.message);
     }
   }
-
+  async resendEmail(email: string): Promise<Partial<User['verification']>> {
+    try {
+      const user = await this.userModel.findOne({ email, verified: false });
+      const verifiedUser = await this.userModel.findOne({ email, verified: true });
+      if (!user && verifiedUser) {
+        throw new NotFoundException("Le compte existe déjà");
+      }
+      if (!user && !verifiedUser) {
+        throw new NotFoundException("Email ou mot de passe incorrect");
+      }
+      if (user && !verifiedUser) {
+        return user.verification;
+      }
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
   // ┬  ┌─┐┌─┐┬┌┐┌
   // │  │ ││ ┬││││
   // ┴─┘└─┘└─┘┴┘└┘

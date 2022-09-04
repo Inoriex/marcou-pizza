@@ -115,7 +115,22 @@ export class UserController {
   async verifyEmail(@Req() req, @Res() res: Response, @Query() query: { verification: string }) {
     try {
       await this.userService.verifyEmail(req, query.verification);
-      return { url: process.env.CLIENT_APP_URL + "account" };
+      return { url: process.env.CLIENT_APP_URL + "login" };
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+  @Get("resend-verify-email")
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ description: "resend Verify Email" })
+  @ApiOkResponse({})
+  @Redirect()
+  async ResendVerifyEmail(@Req() req, @Res() res: Response, @Body() email: string) {
+    try {
+      const userVerification = await this.userService.resendEmail(email);
+      await this.userService.verifyEmail(req, userVerification);
+      return { url: process.env.CLIENT_APP_URL + "login" };
     } catch (error) {
       console.log(error);
       throw error;
