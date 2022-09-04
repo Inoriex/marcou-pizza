@@ -43,7 +43,13 @@ let UserService = class UserService {
             return this.buildRegistrationInfo(user);
         }
         catch (error) {
-            throw new common_1.BadRequestException(error.message);
+            if (error.code !== 11000) {
+                console.log(error);
+                throw new common_1.BadRequestException("Une erreur est survenue");
+            }
+            if (error.code === 11000) {
+                throw new common_1.ConflictException("L'email existe déjà");
+            }
         }
     }
     async verifyEmail(req, verifyUuidDto) {
@@ -56,6 +62,24 @@ let UserService = class UserService {
                 accessToken: await this.authService.createAccessToken(user._id),
                 refreshToken: await this.authService.createRefreshToken(req, user._id),
             };
+        }
+        catch (error) {
+            throw new common_1.BadRequestException(error.message);
+        }
+    }
+    async resendEmail(email) {
+        try {
+            const user = await this.userModel.findOne({ email, verified: false });
+            const verifiedUser = await this.userModel.findOne({ email, verified: true });
+            if (!user && verifiedUser) {
+                throw new common_1.NotFoundException("Le compte existe déjà");
+            }
+            if (!user && !verifiedUser) {
+                throw new common_1.NotFoundException("Email ou mot de passe incorrect");
+            }
+            if (user && !verifiedUser) {
+                return user.verification;
+            }
         }
         catch (error) {
             throw new common_1.BadRequestException(error.message);
@@ -150,7 +174,7 @@ let UserService = class UserService {
         try {
             const user = await this.userModel.findOne({ email, verified: true });
             if (user) {
-                throw new common_1.BadRequestException("Email most be unique.");
+                throw new common_1.BadRequestException("Email must be unique.");
             }
         }
         catch (error) {
@@ -201,7 +225,7 @@ let UserService = class UserService {
         try {
             const user = await this.userModel.findOne({ email, verified: true });
             if (!user) {
-                throw new common_1.NotFoundException("Mauvais email ou mot de passe");
+                throw new common_1.NotFoundException("Email ou mot de passe incorrect");
             }
             return user;
         }
@@ -214,7 +238,7 @@ let UserService = class UserService {
             const match = await bcrypt.compare(attemptPass, user.password);
             if (!match) {
                 await this.passwordsDoNotMatch(user);
-                throw new common_1.NotFoundException("Mauvais email ou mot de passe");
+                throw new common_1.NotFoundException("Email ou mot de passe incorrect");
             }
             return match;
         }
@@ -224,7 +248,7 @@ let UserService = class UserService {
     }
     isUserBlocked(user) {
         if (user.blockExpires > Date.now()) {
-            throw new common_1.ConflictException("User has been blocked try later.");
+            throw new common_1.ConflictException("Votre compte a été temporairement blocké, veuillez reessayer plus tard");
         }
     }
     async passwordsDoNotMatch(user) {
@@ -232,7 +256,7 @@ let UserService = class UserService {
         await user.save();
         if (user.loginAttempts >= this.LOGIN_ATTEMPTS_TO_BLOCK) {
             await this.blockUser(user);
-            throw new common_1.ConflictException("User blocked.");
+            throw new common_1.ConflictException("Votre compte a été temporairement blocké");
         }
     }
     async blockUser(user) {
@@ -324,7 +348,10 @@ let UserService = class UserService {
     }
     async find(id) {
         try {
-            return await this.userModel.findById(id).populate("addresses").exec();
+            return await this.userModel.findById(id).populate({
+                path: "addresses",
+                model: "Address",
+            });
         }
         catch (error) {
             throw new common_1.BadRequestException(error.message);
@@ -356,11 +383,15 @@ let UserService = class UserService {
             let addressId;
             const existingAddress = await this.addressModel.find(address).exec();
             const user = await this.userModel.findById({ _id: userId }).exec();
+            console.log(existingAddress.length);
             if (existingAddress && existingAddress.length > 0) {
                 addressId = existingAddress[0]._id;
-                if (!user.addresses.includes(addressId)) {
+                if (!user.addresses.some(code => JSON.stringify(code) === JSON.stringify({ _id: addressId }))) {
                     user.addresses.push(addressId);
                     return await user.save();
+                }
+                else {
+                    throw new common_1.BadRequestException("L'addresse existe déjà");
                 }
             }
             else {

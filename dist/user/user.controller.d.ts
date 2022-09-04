@@ -28,6 +28,9 @@ export declare class UserController {
     }): Promise<{
         url: string;
     }>;
+    ResendVerifyEmail(req: any, res: Response, email: string): Promise<{
+        url: string;
+    }>;
     login(req: any, loginUserDto: LoginUserDto): Promise<any>;
     refreshAccessToken(refreshAccessTokenDto: RefreshAccessTokenDto): Promise<{
         accessToken: string;

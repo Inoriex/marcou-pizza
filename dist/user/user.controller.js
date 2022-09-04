@@ -104,7 +104,18 @@ let UserController = class UserController {
     async verifyEmail(req, res, query) {
         try {
             await this.userService.verifyEmail(req, query.verification);
-            return { url: process.env.CLIENT_APP_URL + "account" };
+            return { url: process.env.CLIENT_APP_URL + "login" };
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    async ResendVerifyEmail(req, res, email) {
+        try {
+            const userVerification = await this.userService.resendEmail(email);
+            await this.userService.verifyEmail(req, userVerification);
+            return { url: process.env.CLIENT_APP_URL + "login" };
         }
         catch (error) {
             console.log(error);
@@ -174,7 +185,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOkResponse)({ description: "user address successfully fetched" }),
     (0, swagger_1.ApiBadRequestResponse)({ description: "PARAMETERS_FAILED_VALIDATION" }),
-    (0, swagger_1.ApiInternalServerErrorResponse)({ description: "unable to fetch user address" }),
+    (0, swagger_1.ApiInternalServerErrorResponse)({ description: "Impossible de récupérer l'adresse de l'utilisateur" }),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -186,7 +197,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOkResponse)({ description: "user address successfully created" }),
     (0, swagger_1.ApiBadRequestResponse)({ description: "PARAMETERS_FAILED_VALIDATION" }),
-    (0, swagger_1.ApiInternalServerErrorResponse)({ description: "unable to create user address" }),
+    (0, swagger_1.ApiInternalServerErrorResponse)({ description: "Impossible de créer l'adresse de l'utilisateur" }),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, get_user_decorator_1.GetUser)()),
     __param(2, (0, common_1.Body)()),
@@ -200,7 +211,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOkResponse)({ description: "user address successfully created" }),
     (0, swagger_1.ApiBadRequestResponse)({ description: "PARAMETERS_FAILED_VALIDATION" }),
-    (0, swagger_1.ApiInternalServerErrorResponse)({ description: "unable to create user address" }),
+    (0, swagger_1.ApiInternalServerErrorResponse)({ description: "Impossible de modifier l'adresse de l'utilisateur" }),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Param)("addressId")),
@@ -214,7 +225,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOkResponse)({ description: "user address successfully created" }),
     (0, swagger_1.ApiBadRequestResponse)({ description: "PARAMETERS_FAILED_VALIDATION" }),
-    (0, swagger_1.ApiInternalServerErrorResponse)({ description: "unable to create user address" }),
+    (0, swagger_1.ApiInternalServerErrorResponse)({ description: "Impossible de supprimer l'adresse de l'utilisateur" }),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __param(1, (0, common_1.Param)("addressId")),
     __metadata("design:type", Function),
@@ -244,6 +255,19 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "verifyEmail", null);
+__decorate([
+    (0, common_1.Get)("resend-verify-email"),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({ description: "resend Verify Email" }),
+    (0, swagger_1.ApiOkResponse)({}),
+    (0, common_1.Redirect)(),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "ResendVerifyEmail", null);
 __decorate([
     (0, common_1.Post)("login"),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),

@@ -23,6 +23,7 @@ export declare class UserService {
     constructor(userModel: Model<User>, forgotPasswordModel: Model<ForgotPassword>, addressModel: Model<Address>, authService: AuthService, mailService: MailService);
     create(createUserDto: CreateUserDto): Promise<User>;
     verifyEmail(req: any, verifyUuidDto: string): Promise<void>;
+    resendEmail(email: string): Promise<Partial<User["verification"]>>;
     login(req: any, loginUserDto: LoginUserDto): Promise<any>;
     refreshAccessToken(refreshAccessTokenDto: RefreshAccessTokenDto): Promise<{
         accessToken: string;

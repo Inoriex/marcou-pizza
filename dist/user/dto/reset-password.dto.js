@@ -35,12 +35,12 @@ __decorate([
         example: "secret password change me!",
         description: "The password of the User",
         format: "string",
-        minLength: 5,
+        minLength: 8,
         maxLength: 1024,
     }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(5),
+    (0, class_validator_1.MinLength)(8),
     (0, class_validator_1.MaxLength)(1024),
     __metadata("design:type", String)
 ], ResetPasswordDto.prototype, "password", void 0);

@@ -384,7 +384,10 @@ export class UserService {
   }
   async find(id: string): Promise<User> {
     try {
-      return await this.userModel.findById(id).populate("addresses").exec();
+      return await this.userModel.findById(id).populate({
+        path: "addresses",
+        model: "Address",
+      });
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -415,12 +418,16 @@ export class UserService {
       let addressId;
       const existingAddress = await this.addressModel.find(address).exec();
       const user = await this.userModel.findById({ _id: userId }).exec();
+      console.log(existingAddress.length);
       if (existingAddress && existingAddress.length > 0) {
         addressId = existingAddress[0]._id;
-        if (!user.addresses.includes(addressId)) {
+        if (!user.addresses.some(code => JSON.stringify(code) === JSON.stringify({ _id: addressId }))) {
           user.addresses.push(addressId);
           return await user.save();
+        } else {
+          throw new BadRequestException("L'addresse existe déjà");
         }
+
       } else {
         const newAddress = new this.addressModel(address);
         newAddress.save();

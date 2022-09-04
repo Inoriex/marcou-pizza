@@ -81,13 +81,13 @@ __decorate([
         example: "Secret password",
         description: "The password of the User",
         format: "string",
-        minLength: 5,
+        minLength: 8,
         maxLength: 1024,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.Matches)(/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{7,})/, { message: "Weak password" }),
-    (0, class_validator_1.MinLength)(5),
+    (0, class_validator_1.Matches)(/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})/, { message: "Weak password" }),
+    (0, class_validator_1.MinLength)(8),
     (0, class_validator_1.MaxLength)(1024),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
