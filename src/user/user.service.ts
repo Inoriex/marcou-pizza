@@ -137,7 +137,18 @@ export class UserService {
       throw new BadRequestException(refreshAccessTokenDto.refreshToken);
     }
   }
-
+  async getUser(refreshAccessTokenDto: RefreshAccessTokenDto) {
+    try {
+      const userId = await this.authService.findRefreshToken(refreshAccessTokenDto.refreshToken);
+      const user = await this.userModel.findById(userId);
+      if (!user) {
+        throw new BadRequestException("Aucun utilisateur trouvé");
+      }
+      return user;
+    } catch (error) {
+      throw new BadRequestException(refreshAccessTokenDto.refreshToken);
+    }
+  }
   // ┌─┐┌─┐┬─┐┌─┐┌─┐┌┬┐  ┌─┐┌─┐┌─┐┌─┐┬ ┬┌─┐┬─┐┌┬┐
   // ├┤ │ │├┬┘│ ┬│ │ │   ├─┘├─┤└─┐└─┐││││ │├┬┘ ││
   // └  └─┘┴└─└─┘└─┘ ┴   ┴  ┴ ┴└─┘└─┘└┴┘└─┘┴└──┴┘
@@ -427,7 +438,6 @@ export class UserService {
         } else {
           throw new BadRequestException("L'addresse existe déjà");
         }
-
       } else {
         const newAddress = new this.addressModel(address);
         newAddress.save();

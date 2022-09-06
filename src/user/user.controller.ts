@@ -162,7 +162,18 @@ export class UserController {
       throw error;
     }
   }
-
+  @Get("user-info")
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ description: "Get user info from refresh token" })
+  @ApiCreatedResponse({})
+  async userInfo(@Body() refreshAccessTokenDto: RefreshAccessTokenDto) {
+    try {
+      console.log(this.refreshAccessToken);
+      return await this.userService.getUser(refreshAccessTokenDto);
+    } catch (error) {
+      throw error.message;
+    }
+  }
   @Post("forgot-password")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ description: "Forgot password" })
